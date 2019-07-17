@@ -15,7 +15,7 @@
         :placeholder="placeholder"
         @hit="$emit('input', $event)"
       />
-      <div class="spinner" :class="{'-show': isWorking}"><fa-icon icon="spinner" size="lg" spin /></div>
+      <div class="spinner" :class="{'-show': isBusy}"><fa-icon icon="spinner" size="lg" spin /></div>
     </template>
   </div>
 </template>
@@ -41,7 +41,7 @@ export default {
       currentValue: null,
       typedSearch: '',
       apiOptions: [],
-      isWorking: false,
+      isBusy: false,
     };
   },
   created() {
@@ -49,10 +49,10 @@ export default {
   },
   methods: {
     async getSearchResults(query) {
-      this.isWorking = true
+      this.isBusy = true
       const results = await this.searchFunc(query)
       this.apiOptions = results
-      this.isWorking = false
+      this.isBusy = false
     }
   },
   watch: {
