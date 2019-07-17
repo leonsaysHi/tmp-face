@@ -1,6 +1,6 @@
 <template>
   <div class="styleguide">
-    <div class="my-3">
+    <div class="styleguide__block">
       <h1>h1. Bootstrap heading</h1>
       <h2>h2. Bootstrap heading</h2>
       <h3>h3. Bootstrap heading</h3>
@@ -8,7 +8,7 @@
       <h5>h5. Bootstrap heading</h5>
       <h6>h6. Bootstrap heading</h6>
     </div>
-    <div class="my-3">
+    <div class="styleguide__block">
       <b-button variant="primary">Primary</b-button>
       <b-button variant="outline-primary">Outline primary</b-button>
       <b-button variant="secondary">Secondary</b-button>
@@ -18,7 +18,7 @@
       <b-button variant="danger">Danger</b-button>
       <b-link>Link</b-link>
     </div>
-    <div>
+    <div class="styleguide__block">
       <hr />
       <hr class="primary" />
       <hr class="secondary" />
@@ -26,7 +26,7 @@
       <hr class="primary lg" />
       <hr class="secondary lg" />
     </div>
-    <div class="my-3">
+    <div class="styleguide__block">
       <fa-icon icon="calendar-alt" />
       <fa-icon icon="check" />
       <fa-icon icon="plus-square" size="lg" />
@@ -34,16 +34,19 @@
       <fa-icon icon="user-alt" size="3x" />
       <fa-icon icon="ellipsis-h" size="lg" />
     </div>
-    <div class="my-3">
+    <div class="styleguide__block">
       <div class="d-flex justify-content-between mb-3">
         <h3>Screen title</h3>
-        <div>
-          <div>Extra infos</div>
-          <div class="h4">Extra status</div>
+        <div class="d-flex align-items-start">
+          <b-button variant="outline-primary" class="mr-3">Extra action</b-button>
+          <div>
+            <div>Extra infos</div>
+            <div class="h4">Extra status</div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="my-3">
+    <div class="styleguide__block">
       <h6>Speaker Basic Profile</h6>
       <b-row>
         <b-col>
@@ -81,12 +84,12 @@
         </b-col>
       </b-row>
     </div>
-    <div class="my-3">
+    <div class="styleguide__block">
       <b-card header="Card title">
         <b-card-text>Card text: faucibus dolor eget est dictum blandit. Integer tempor tempor vulputate. Pellentesque malesuada consequat neque a maximus. Integer pharetra quis felis sit amet pharetra. Phasellus dapibus consectetur est convallis imperdiet. Fusce orci ligula, hendrerit sed massa sit amet, scelerisque laoreet nulla. In hac habitasse platea dictumst. Maecenas at lacinia augue. Nulla ut tempus nisl. Etiam ornare purus sed urna laoreet elementum. Nunc in eros et ex blandit vulputate in vel justo. Maecenas gravida cursus nulla, vitae fermentum tortor sodales ut. Aenean pulvinar vestibulum orci, sed aliquam risus. In a orci lacus.</b-card-text>
       </b-card>
     </div>
-    <div class="my-3">
+    <div class="styleguide__block">
 
       <b-form-group
         id="input-group-1"
@@ -162,7 +165,7 @@
       <b-button type="submit" variant="primary">Submit</b-button>
 
     </div>
-    <div class="my-3">
+    <div class="styleguide__block">
       <b-button v-b-modal.modal-1>Launch demo modal</b-button>
       <b-modal
         id="modal-1"
@@ -172,7 +175,7 @@
         <p class="my-4">Hello from modal!</p>
       </b-modal>
     </div>
-    <div class="my-3">
+    <div class="styleguide__block">
       <div class="d-flex align-items-baseline justify-content-between">
         <h6>Table title</h6>
         <div class="d-flex">
@@ -268,3 +271,10 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .styleguide__block {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: dashed 1px #efefef;
+  }
+</style>
