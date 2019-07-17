@@ -125,7 +125,7 @@
           <b-link><fa-icon icon="download" class="mr-1" />Export</b-link>
         </div>
       </div>
-      <b-table striped
+      <b-table striped borderless
         :items="table.items"
         :fields="table.fields"
       >
