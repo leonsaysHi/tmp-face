@@ -66,3 +66,11 @@ $table-active-bg:             $table-hover-bg;
 $table-head-bg:               $primary;
 $table-head-color:            $white;
 $table-striped-order:         odd;
+
+// Cards
+
+$card-border-width:                 0;
+$card-border-radius:                0;
+$card-cap-bg:                       $table-head-bg;
+$card-cap-color:                 $table-head-color;
+$card-bg:                           $table-accent-bg;
