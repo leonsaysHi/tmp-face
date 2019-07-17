@@ -72,7 +72,7 @@
         </b-col>
         <b-col>
           <small>ID Number:</small>
-          <div class="lead">- -</div>
+          <div class="lead text-primary">123456789</div>
         </b-col>
         <b-col>
           <small>Title:</small>
@@ -82,6 +82,19 @@
           <small>Specialization:</small>
           <div class="lead">Psycology</div>
         </b-col>
+        <hr class="secondary w-100 my-3">
+        <b-col>
+          <small>Event Agenda:</small>
+          <div class="lead">Event 1: ###</div>
+          <div class="lead">Event 2: ###</div>
+          <div class="lead">Event 3: ###</div>
+        </b-col>
+        <hr class="primary w-100 my-3">
+        <b-col>
+          <small>Comment:</small>
+          <div class="lead">- -</div>
+        </b-col>
+        <hr class="w-100 my-3">
       </b-row>
     </div>
     <div class="styleguide__block">
