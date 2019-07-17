@@ -110,6 +110,12 @@
       </b-modal>
     </div>
     <div class="my-3">
+      <div class="d-flex align-items-baseline justify-content-between">
+        <h6>Table title</h6>
+        <div class="d-flex">
+          <b-link><fa-icon icon="download" class="mr-1" />Export</b-link>
+        </div>
+      </div>
       <b-table striped :items="table.items"></b-table>
     </div>
   </div>
