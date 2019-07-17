@@ -15,7 +15,9 @@
         :placeholder="placeholder"
         @hit="$emit('input', $event)"
       />
-      <div class="spinner" :class="{'-show': isBusy}"><fa-icon icon="spinner" size="lg" spin /></div>
+      <div class="spinner" :class="{'-show': isBusy}">
+        <b-spinner small></b-spinner>
+      </div>
     </template>
   </div>
 </template>
@@ -26,7 +28,7 @@ import { isMobile } from 'mobile-device-detect';
 
 export default {
   props: {
-    value: {type: String},
+    value: {type: [String, Object]},
     placeholder: {type: String, default: null},
     serializer: {type: Function, default: s => s.text},
     searchFunc: {type: Function, default: null},
