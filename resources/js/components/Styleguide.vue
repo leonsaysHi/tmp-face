@@ -20,10 +20,11 @@
     </div>
     <div class="my-3">
       <fa-icon icon="calendar-alt" />
+      <fa-icon icon="check" />
       <fa-icon icon="plus-square" size="lg" />
       <fa-icon icon="download" size="2x" />
       <fa-icon icon="user-alt" size="3x" />
-      <fa-icon icon="spinner" size="lg" />
+      <fa-icon icon="ellipsis-h" size="lg" />
     </div>
     <div class="my-3">
       <b-form-group
@@ -116,7 +117,17 @@
           <b-link><fa-icon icon="download" class="mr-1" />Export</b-link>
         </div>
       </div>
-      <b-table striped :items="table.items"></b-table>
+      <b-table striped
+        :items="table.items"
+        :fields="table.fields"
+      >
+        <template slot="actions" slot-scope="data">
+          <b-button :variant=" data.item.selected ? 'success' : 'outline-success'" size="sm">{{ data.item.selected ? 'Selected' : 'Select' }}&nbsp;<fa-icon v-if="data.item.selected" icon="check" /></b-button>
+        </template>
+        <template slot="seemore" slot-scope="data">
+          <b-button variant="primary" size="sm"><fa-icon icon="ellipsis-h" /></b-button>
+        </template>
+      </b-table>
     </div>
   </div>
 </template>
@@ -163,9 +174,16 @@ export default {
       },
       foods: [{ text: 'Select One', value: null }, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
       table: {
+        fields: [
+          { key: 'first_name', sortable: true },
+          { key: 'last_name', sortable: true },
+          'age',
+          { key: 'actions', label: 'Actions' },
+          { key: 'seemore', label: '' }
+        ],
         items: [
           { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
-          { age: 21, first_name: 'Larsen', last_name: 'Shaw' },
+          { age: 21, first_name: 'Larsen', last_name: 'Shaw', selected: true },
           { age: 89, first_name: 'Geneva', last_name: 'Wilson' },
           { age: 38, first_name: 'Jami', last_name: 'Carney' }
         ]
