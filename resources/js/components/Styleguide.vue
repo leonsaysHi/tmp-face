@@ -33,6 +33,8 @@
       <fa-icon icon="download" size="2x" />
       <fa-icon icon="user-alt" size="3x" />
       <fa-icon icon="ellipsis-h" size="lg" />
+      <fa-icon icon="eye" size="lg" />
+      <fa-icon icon="eye-slash" size="lg" />
     </div>
     <div class="styleguide__block">
       <div class="d-flex justify-content-between mb-3">
@@ -207,6 +209,7 @@
         </template>
         <template slot="seemore" slot-scope="data">
           <b-button variant="primary" size="sm"><fa-icon icon="ellipsis-h" /></b-button>
+          <b-link class="ml-2"><fa-icon icon="eye-slash" size="lg" /></b-link>
         </template>
       </b-table>
     </div>
