@@ -18,6 +18,14 @@
       <b-button variant="danger">Danger</b-button>
       <b-link>Link</b-link>
     </div>
+    <div>
+      <hr />
+      <hr class="primary" />
+      <hr class="secondary" />
+      <hr class="lg" />
+      <hr class="primary lg" />
+      <hr class="secondary lg" />
+    </div>
     <div class="my-3">
       <fa-icon icon="calendar-alt" />
       <fa-icon icon="check" />

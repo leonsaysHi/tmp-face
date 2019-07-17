@@ -1,0 +1,11 @@
+hr {
+  &.primary {
+    border-color: $primary;
+  }
+  &.secondary {
+   border-color: lighten(desaturate($primary, 50%), 50%);
+  }
+  &.lg {
+    border-top-width: 2px;
+  }
+}
