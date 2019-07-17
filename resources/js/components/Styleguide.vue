@@ -82,6 +82,12 @@
       </b-row>
     </div>
     <div class="my-3">
+      <b-card header="Card title">
+        <b-card-text>Card text: faucibus dolor eget est dictum blandit. Integer tempor tempor vulputate. Pellentesque malesuada consequat neque a maximus. Integer pharetra quis felis sit amet pharetra. Phasellus dapibus consectetur est convallis imperdiet. Fusce orci ligula, hendrerit sed massa sit amet, scelerisque laoreet nulla. In hac habitasse platea dictumst. Maecenas at lacinia augue. Nulla ut tempus nisl. Etiam ornare purus sed urna laoreet elementum. Nunc in eros et ex blandit vulputate in vel justo. Maecenas gravida cursus nulla, vitae fermentum tortor sodales ut. Aenean pulvinar vestibulum orci, sed aliquam risus. In a orci lacus.</b-card-text>
+      </b-card>
+    </div>
+    <div class="my-3">
+
       <b-form-group
         id="input-group-1"
         label="Email address:"
@@ -154,6 +160,7 @@
       </b-form-group>
 
       <b-button type="submit" variant="primary">Submit</b-button>
+
     </div>
     <div class="my-3">
       <b-button v-b-modal.modal-1>Launch demo modal</b-button>
