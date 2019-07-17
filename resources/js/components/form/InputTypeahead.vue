@@ -9,12 +9,13 @@
     />
     <template v-else>
       <vue-bootstrap-typeahead
-        :data="options"
+        :data="apiOptions"
         v-model="typedSearch"
         :serializer="serializer"
         :placeholder="placeholder"
         @hit="$emit('input', $event)"
       />
+      <div class="spinner" :class="{'-show': isWorking}"><fa-icon icon="spinner" size="lg" spin /></div>
     </template>
   </div>
 </template>
@@ -39,6 +40,8 @@ export default {
     return {
       currentValue: null,
       typedSearch: '',
+      apiOptions: [],
+      isWorking: false,
     };
   },
   created() {
@@ -46,8 +49,10 @@ export default {
   },
   methods: {
     async getSearchResults(query) {
+      this.isWorking = true
       const results = await this.searchFunc(query)
-      this.options = results
+      this.apiOptions = results
+      this.isWorking = false
     }
   },
   watch: {

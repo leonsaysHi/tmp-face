@@ -23,6 +23,7 @@
       <fa-icon icon="plus-square" size="lg" />
       <fa-icon icon="download" size="2x" />
       <fa-icon icon="user-alt" size="3x" />
+      <fa-icon icon="spinner" size="lg" />
     </div>
     <div class="my-3">
       <b-form-group
@@ -78,20 +79,22 @@
         <input-date-picker />
       </b-form-group>
 
-      <b-form-group id="input-group-6" label="Typeahead with static options">
+      <b-form-group id="input-group-6" label="Typeahead with static options" label-for="input-6">
         <input-typeahead
+          id="input-6"
           v-model="form.typeahead.value1"
           :options="form.typeahead.options"
         />
-        <p>Result: {{ form.typeahead.value1 }}</p>
+        <small tabindex="-1" class="form-text text-muted">Result: {{ form.typeahead.value1 }}</small>
       </b-form-group>
 
-      <b-form-group id="input-group-7" label="Typeahead with dynamic options">
+      <b-form-group id="input-group-7" label="Typeahead with dynamic options" label-for="input-7">
         <input-typeahead
+          id="input-7"
           v-model="form.typeahead.value2"
           :search-func="getTypeaheadOptions"
         />
-        <p>Result: {{ form.typeahead.value2 }}</p>
+        <small tabindex="-1" class="form-text text-muted">Result: {{ form.typeahead.value2 }}</small>
       </b-form-group>
 
       <b-button type="submit" variant="primary">Submit</b-button>
