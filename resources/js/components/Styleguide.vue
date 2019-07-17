@@ -175,7 +175,10 @@
         <small tabindex="-1" class="form-text text-muted">Result: {{ form.typeahead.value2 }}</small>
       </b-form-group>
 
-      <b-button type="submit" variant="primary">Submit</b-button>
+      <div class="d-flex justify-content-end">
+        <b-button type="reset" variant="outline-secondary" class="ml-2">Reset</b-button>
+        <b-button type="submit" variant="primary" class="ml-2 px-4">Submit</b-button>
+      </div>
 
     </div>
     <div class="styleguide__block">
@@ -200,7 +203,7 @@
         :fields="table.fields"
       >
         <template slot="actions" slot-scope="data">
-          <b-button :variant=" data.item.selected ? 'success' : 'outline-success'" size="sm">{{ data.item.selected ? 'Selected' : 'Select' }}&nbsp;<fa-icon v-if="data.item.selected" icon="check" /></b-button>
+          <b-button :variant=" data.item.selected ? 'success' : 'outline-success'" size="sm">{{ data.item.selected ? 'Selected' : 'Select' }}<fa-icon v-if="data.item.selected" icon="check" class="ml-2" /></b-button>
         </template>
         <template slot="seemore" slot-scope="data">
           <b-button variant="primary" size="sm"><fa-icon icon="ellipsis-h" /></b-button>
