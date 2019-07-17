@@ -1,0 +1,15 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700');
+
+// Bootstrap
+@import './bootstrap/bootstrap';
+
+// Global styling
+@import './global/form';
+@import './global/modal';
+@import './global/table';
+
+// Components styling
+@import "pc-bootstrap4-datetimepicker/src/sass/bootstrap-datetimepicker-build.scss";
+@import './components/topbar';
+@import './components/navbar';

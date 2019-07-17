@@ -1,0 +1,68 @@
+// Overwrite bootstrap variables here...
+
+// Color system
+$primary:       hsl(201, 84%, 44%);
+$theme-colors:(
+  "primary":    $primary,
+  "secondary":  $secondary,
+  "success":    $success,
+  "info":       $info,
+  "warning":    $warning,
+  "danger":     $danger,
+  "light":      $light,
+  "dark":       $dark
+);
+
+// Typography
+$font-size-base:              .8rem;
+$font-size-lg:                $font-size-base * 1.25;
+$font-size-sm:                $font-size-base * .875;
+$headings-color:     hsl(215, 48%, 49%);
+$h1-font-size:                $font-size-base * 2.5;
+$h2-font-size:                $font-size-base * 2;
+$h3-font-size:                $font-size-base * 1.75;
+$h4-font-size:                $font-size-base * 1.5;
+$h5-font-size:                $font-size-base * 1.25;
+$h6-font-size:                $font-size-base;
+
+// Links
+$link-color:                              theme-color("primary");
+$link-hover-color:                        darken($link-color, 15%);
+
+// Buttons + Forms
+$input-btn-font-size:         $font-size-base;
+
+// Buttons
+$btn-font-size:               $font-size-base;
+$btn-padding-y:               $input-btn-padding-y-lg;
+$btn-padding-y-sm:            $input-btn-padding-y;
+$btn-border-radius:           $border-radius-sm;
+$btn-border-radius-lg:        $border-radius;
+
+// Components
+$component-active-bg:         theme-color("primary");
+
+// Forms
+$label-margin-bottom:                          .25rem;
+$input-border-width:                           2px;
+$custom-select-border-width:                   $input-border-width;
+$custom-control-indicator-checked-disabled-bg: rgba(theme-color("primary"), .5);
+$custom-control-indicator-checked-bg:          $component-active-bg;
+$custom-control-indicator-active-bg:           lighten($component-active-bg, 35%);
+$custom-checkbox-indicator-indeterminate-bg:   $component-active-bg;
+$custom-radio-indicator-icon-checked:  $custom-checkbox-indicator-icon-checked;
+
+// Modals
+$modal-header-padding-y:           .5rem;
+$modal-header-padding:             $modal-header-padding-y $modal-header-padding-x;
+$modal-header-border-color:        $gray-100;
+$modal-footer-border-color:        $gray-100;
+
+// Tables
+$table-accent-bg:             rgba($black, .05);
+$table-hover-color:           $table-color;
+$table-hover-bg:              rgba($black, .075);
+$table-active-bg:             $table-hover-bg;
+$table-head-bg:               $primary;
+$table-head-color:            $white;
+$table-striped-order:         odd;

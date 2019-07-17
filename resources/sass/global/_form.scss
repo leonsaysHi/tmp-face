@@ -1,0 +1,15 @@
+label {
+  color: $text-muted;
+}
+
+.input-date-picker {
+  position: relative;
+  > .icon {
+    pointer-events: none;
+    position: absolute;
+    right: .75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $text-muted;
+  }
+}

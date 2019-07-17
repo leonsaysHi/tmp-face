@@ -1,0 +1,8 @@
+.modal-body, .modal-footer {
+  background-color: $modal-header-border-color;
+}
+
+.modal-title {
+  color: $body-color;
+  font-size: $h5-font-size;
+}
