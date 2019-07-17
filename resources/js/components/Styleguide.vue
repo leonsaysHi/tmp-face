@@ -285,9 +285,10 @@ export default {
 }
 </script>
 <style scoped>
-  .styleguide__block {
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: dashed 1px #efefef;
+  .styleguide__block:after {
+    content: '';
+    display: block;
+    margin: 1rem 3%;
+    border-bottom: dashed 2px #efefef;
   }
 </style>
