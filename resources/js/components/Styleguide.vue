@@ -35,6 +35,53 @@
       <fa-icon icon="ellipsis-h" size="lg" />
     </div>
     <div class="my-3">
+      <div class="d-flex justify-content-between mb-3">
+        <h3>Screen title</h3>
+        <div>
+          <div>Extra infos</div>
+          <div class="h4">Extra status</div>
+        </div>
+      </div>
+    </div>
+    <div class="my-3">
+      <h6>Speaker Basic Profile</h6>
+      <b-row>
+        <b-col>
+          <small>Speaker Name:</small>
+          <div class="lead">Speaker name</div>
+        </b-col>
+        <b-col>
+          <small>Speaker Level:</small>
+          <div class="lead">Senior Speaker</div>
+        </b-col>
+        <b-col>
+          <small>Speaker Type:</small>
+          <div class="lead">Medical Professional / Government</div>
+        </b-col>
+        <b-col>
+          <small>City:</small>
+          <div class="lead">Dalian - Liaoning Province</div>
+        </b-col>
+        <div class="w-100 my-2"></div>
+        <b-col>
+          <small>ID Type:</small>
+          <div class="lead">- -</div>
+        </b-col>
+        <b-col>
+          <small>ID Number:</small>
+          <div class="lead">- -</div>
+        </b-col>
+        <b-col>
+          <small>Title:</small>
+          <div class="lead">Senior Doctor</div>
+        </b-col>
+        <b-col>
+          <small>Specialization:</small>
+          <div class="lead">Psycology</div>
+        </b-col>
+      </b-row>
+    </div>
+    <div class="my-3">
       <b-form-group
         id="input-group-1"
         label="Email address:"
