@@ -78,12 +78,20 @@
         <input-date-picker />
       </b-form-group>
 
-      <b-form-group id="input-group-6">
+      <b-form-group id="input-group-6" label="Typeahead with static options">
         <input-typeahead
           v-model="form.typeahead.value1"
-          :options="form.typeahead.staticOptions"
+          :options="form.typeahead.options"
         />
         <p>Result: {{ form.typeahead.value1 }}</p>
+      </b-form-group>
+
+      <b-form-group id="input-group-7" label="Typeahead with dynamic options">
+        <input-typeahead
+          v-model="form.typeahead.value2"
+          :search-func="getTypeaheadOptions"
+        />
+        <p>Result: {{ form.typeahead.value2 }}</p>
       </b-form-group>
 
       <b-button type="submit" variant="primary">Submit</b-button>
@@ -126,7 +134,22 @@ export default {
         },
         typeahead: {
           value1: null,
-          staticOptions: ['Canada', 'USA', 'Mexico'],
+          value2: null,
+          options: [
+            { text: "Alberta", value: "AB" },
+            { text: "British Columbia", value: "BC" },
+            { text: "Manitoba", value: "MB" },
+            { text: "New Brunswick", value: "NB" },
+            { text: "Newfoundland and Labrador", value: "NL" },
+            { text: "Nova Scotia", value: "NS" },
+            { text: "Northwest Territories", value: "NT" },
+            { text: "Nunavut", value: "NU" },
+            { text: "Ontario", value: "ON" },
+            { text: "Prince Edward Island", value: "PE" },
+            { text: "Quebec", value: "QC" },
+            { text: "Saskatchewan", value: "SK" },
+            { text: "Yukon", value: "YT" }
+          ],
         }
       },
       foods: [{ text: 'Select One', value: null }, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
@@ -140,5 +163,19 @@ export default {
       },
     }
   },
+  methods: {
+    async getTypeaheadOptions(query) {
+      const results = await this.fakeApi()
+      return results
+    },
+    fakeApi () {
+      const APIresult = this.form.typeahead.options
+      return new Promise(function(resolve, reject) {
+        setTimeout(() => {
+          resolve(APIresult);
+        }, 500);
+      });
+    }
+  }
 }
 </script>
