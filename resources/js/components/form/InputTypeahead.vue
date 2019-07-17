@@ -57,7 +57,13 @@ export default {
   },
   watch: {
     typedSearch: _.debounce(function(query) {
-      this.getSearchResults(query)
+      query = _.trim(query)
+      if (query.length) {
+        this.getSearchResults(query)
+      }
+      else {
+        this.apiOptions = []
+      }
     }, 500)
   },
 };
