@@ -24,6 +24,7 @@ import store from './store';
 /* Screens */
 Vue.component('styleguide', require('./screens/Styleguide.vue').default);
 Vue.component('home', require('./screens/Home.vue').default);
+Vue.component('payment', require('./screens/payment/Payment.vue').default);
 
 /* Components */
 Vue.component('topbar', require('./components/Topbar.vue').default);

@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('styleguide', 'StyleguideViewController')->name('styleguide');
 Route::get('home', 'HomeViewController')->name('home');
+Route::get('payment', 'PaymentViewController')->name('payment');
 
 Route::middleware('auth')->group(function () {
     // Route::get('dashboard', 'DashboardViewController')->name('dashboard');
