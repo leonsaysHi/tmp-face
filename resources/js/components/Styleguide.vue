@@ -35,6 +35,8 @@
       <fa-icon icon="ellipsis-h" size="lg" />
       <fa-icon icon="eye" size="lg" />
       <fa-icon icon="eye-slash" size="lg" />
+      <fa-icon icon="caret-down" size="lg" />
+      <fa-icon icon="caret-up" size="lg" />
     </div>
     <div class="styleguide__block">
       <div class="d-flex justify-content-between mb-3">
@@ -194,15 +196,23 @@
       </b-modal>
     </div>
     <div class="styleguide__block">
-      <div class="d-flex align-items-baseline justify-content-between">
-        <h6>Table title</h6>
-        <div class="d-flex">
+      <b-collapse v-model="table.filters.show">
+        <div class="pb-3">[Filters here...]</div>
+      </b-collapse>
+      <div class="d-flex justify-content-between">
+        <div class="d-flex align-items-baseline">
+          <h6 class="mr-2">Table title</h6>
+          <b-link @click="table.filters.show = !table.filters.show">Filters<fa-icon :icon="table.filters.show ? 'caret-up' : 'caret-down'" class="ml-1" /></b-link>
+        </div>
+        <div class="d-flex align-items-baseline">
           <b-link><fa-icon icon="download" class="mr-1" />Export</b-link>
         </div>
       </div>
       <b-table striped borderless
         :items="table.items"
         :fields="table.fields"
+        :per-page="table.perPage"
+        :current-page="table.currentPage"
       >
         <template slot="actions" slot-scope="data">
           <b-button :variant=" data.item.selected ? 'success' : 'outline-success'" size="sm">{{ data.item.selected ? 'Selected' : 'Select' }}<fa-icon v-if="data.item.selected" icon="check" class="ml-2" /></b-button>
@@ -212,6 +222,13 @@
           <b-link class="ml-2"><fa-icon icon="eye-slash" size="lg" /></b-link>
         </template>
       </b-table>
+      <b-pagination
+        v-model="table.currentPage"
+        :total-rows="table.items.length"
+        :per-page="table.perPage"
+        aria-controls="my-table"
+        align="center"
+      ></b-pagination>
     </div>
   </div>
 </template>
@@ -258,6 +275,11 @@ export default {
       },
       foods: [{ text: 'Select One', value: null }, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
       table: {
+        filters: {
+          show: false,
+        },
+        perPage: 5,
+        currentPage: 1,
         fields: [
           { key: 'first_name', sortable: true },
           { key: 'last_name', sortable: true },
@@ -269,7 +291,10 @@ export default {
           { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
           { age: 21, first_name: 'Larsen', last_name: 'Shaw', selected: true },
           { age: 89, first_name: 'Geneva', last_name: 'Wilson' },
-          { age: 38, first_name: 'Jami', last_name: 'Carney' }
+          { age: 38, first_name: 'Jami', last_name: 'Carney' },
+          { age: 41, first_name: 'Thomas', last_name: 'Wilson' },
+          { age: 18, first_name: 'Sara', last_name: 'Brown' },
+          { age: 22, first_name: 'Jamila', last_name: 'Leonard' },
         ]
       },
     }
