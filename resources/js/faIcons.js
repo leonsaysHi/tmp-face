@@ -1,6 +1,8 @@
 // https://fortawesome.com/sets/font-awesome-5-solid
 import {
     faCalendarAlt,
+    faCaretDown,
+    faCaretUp,
     faCheck,
     faDownload,
     faEllipsisH,
@@ -11,6 +13,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { library } from '@fortawesome/fontawesome-svg-core'
 library.add(faCalendarAlt)
+library.add(faCaretDown)
+library.add(faCaretUp)
 library.add(faCheck)
 library.add(faDownload)
 library.add(faEllipsisH)
