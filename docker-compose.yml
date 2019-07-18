@@ -1,0 +1,13 @@
+version: '3'
+services:
+  web:
+    entrypoint: /usr/local/bin/start-container
+    expose:
+      - "8888"
+    env_file:
+      - .env.docker
+    build:
+      context: ./deploy/app
+    volumes:
+      - ./:/app
+      - ./shared:/opt/shared

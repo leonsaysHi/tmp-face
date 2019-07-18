@@ -1,0 +1,25 @@
+filebeat.prospectors:
+
+- input_type: log
+
+  paths:
+        - /app/storage/logs/*.log
+        - /var/log/nginx/error.log
+        - /var/log/php-fpm/7.2/error.log
+
+  document_type: cat-core
+
+  multiline:
+    pattern: '^\[[0-9]{4}-[0-9]{2}-[0-9]{2}'
+    negate: true
+    match: after
+    
+tags: [cat-core]
+
+fields:
+  env: staging
+
+output.logstash:
+  hosts: ["incoming.logs.digitalpfizer.com:6799"]
+
+  ssl.certificate_authorities: ["/etc/ssl/entrust_ev_ca.cer"]

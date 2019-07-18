@@ -1,5 +1,5 @@
 const items = {
-  home: { label: 'Home', href:'#'},
+  home: { label: 'Home', href:'/home'},
   speakerManagement: { label: 'Speaker Management', href:'#'},
   packageManagement: { label: 'Package Management', href:'#'},
   satelliteVisit: { label: 'Satellite Visit', href:'#'},

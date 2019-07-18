@@ -1,0 +1,30 @@
+{
+    "total_count": 1,
+    "entries": [
+        {
+            "type": "file",
+            "id": "302228279845",
+            "file_version": {
+                "type": "file_version",
+                "id": "318226539301",
+                "sha1": "75409d0ee432adbc80f2578c7d08fd8a575768ed"
+            },
+            "sequence_id": "1",
+            "etag": "1",
+            "sha1": "75409d0ee432adbc80f2578c7d08fd8a575768ed",
+            "name": "PMR017338_SOW_PMR1.xls"
+        }
+    ],
+    "offset": 0,
+    "limit": 100,
+    "order": [
+        {
+            "by": "type",
+            "direction": "ASC"
+        },
+        {
+            "by": "name",
+            "direction": "ASC"
+        }
+    ]
+}

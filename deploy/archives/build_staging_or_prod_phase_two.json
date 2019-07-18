@@ -1,0 +1,637 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Build a Task Definition and deploy to docker ECS",
+  "Parameters": {
+    "AdminPassword": {
+      "Type": "String",
+      "Description": "password for the default admin user",
+      "MinLength": "1"
+    },
+    "AppEnv": {
+      "Type": "String",
+      "Description": "defaults to production",
+      "AllowedValues": ["production", "staging"],
+      "Default": "production"
+    },
+    "AppName": {
+      "Type": "String",
+      "Description": "smartcompare, smarttest or crt (all lowercase, can have number), etc. This will also be the S3 bucket name",
+      "MinLength": "1"
+    },
+    "DBName": {
+      "Type": "String",
+      "Description": "The name of the database attached to our shared RDS you made ahead of time",
+      "MinLength": "1"
+    },
+    "DBUser": {
+      "Type": "String",
+      "Description": "The username of the database attached to our shared RDS you made ahead of time",
+      "MinLength": "1"
+    },
+    "DBPassword": {
+      "Type": "String",
+      "Description": "The password of the database attached to our shared RDS you made ahead of time",
+      "MinLength": "1"
+    },
+    "Cluster": {
+      "Default": "default",
+      "AllowedValues": ["default", "cat-platform-production"],
+      "Description": "Which cluster to run this one"
+    },
+    "WhichClusterInstanceId": {
+      "Default": "i-08509ed582a28e45f",
+      "AllowedValues": ["i-08509ed582a28e45f", "i-03003b6710294f5f4"],
+      "Description": "Which Ec2 to run this on i-03003b6710294f5f4 is prod i-08509ed582a28e45f is stage"
+    },
+    "AppPort": {
+      "Type": "String",
+      "Description": "Between 8000-8999 see what is free in the ALB",
+      "MinLength": "1"
+    },
+    "AppPortSSL": {
+      "Type": "String",
+      "Description": "1 above AppPort is ideal",
+      "MinLength": "1"
+    },
+    "UniqueDomainName": {
+      "Default": "foo-qa.digitalpfizer.com",
+      "Type": "String",
+      "Description": "e.g. foo-qa.stagingarea.us"
+    },
+    "ParentProjectTag": {
+      "Type": "String",
+      "Description": "parent_project tags",
+      "MinLength": "1"
+    },
+    "EnvironmentTag": {
+      "Type": "String",
+      "Description": "environment tags",
+      "MinLength": "1"
+    },
+    "BillingRefTag": {
+      "Type": "String",
+      "Description": "billing_ref tags",
+      "MinLength": "1"
+    },
+    "ApplicationTag": {
+      "Type": "String",
+      "Description": "application tags more of a human readable name",
+      "MinLength": "1"
+    },
+    "KeyContact": {
+      "Type": "String",
+      "Description": "key_contact tag",
+      "MinLength": "1"
+    },
+    "ProjectTag": {
+      "Type": "String",
+      "Description": "project tag",
+      "MinLength": "1"
+    },
+    "STAGETag": {
+      "Type": "String",
+      "Description": "STAGE tag",
+      "MinLength": "1"
+    },
+    "HostedZone": {
+      "Type": "String",
+      "Description": "Zone for ELB alias",
+      "MinLength": "1"
+    },
+    "DesiredCount": {
+      "Type": "Number",
+      "Default": 1,
+      "MaxValue": 2,
+      "Description": "Set this to 0 for 1st build after that leave at 1"
+    },
+    "VPCId": {
+      "Type": "String",
+      "Description": "staging is vpc-02558169 and production is coming soon",
+      "AllowedValues": ["vpc-02558169", "vpc-02558169"],
+      "Default": "vpc-02558169"
+    },
+    "NonSSLListenerArn": {
+      "Type": "String",
+      "Description": "staging is arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-alb-poc/9ab776c1316d5257/b22058072e819bcd and production the other one",
+      "AllowedValues": [
+        "arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-alb-poc/9ab776c1316d5257/b22058072e819bcd",
+        "arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-plaform-production/93ae413fbca036a1/f75ef1c3deee89d0"
+      ],
+      "Default": "arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-plaform-production/93ae413fbca036a1/f75ef1c3deee89d0"
+    },
+    "SSLListenerArn": {
+      "Type": "String",
+      "Description": "staging is arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-alb-poc/9ab776c1316d5257/0472c148e64dab90 and production the other one",
+      "AllowedValues": [
+        "arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-alb-poc/9ab776c1316d5257/0472c148e64dab90",
+        "arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-plaform-production/93ae413fbca036a1/9452a1f2a8130b50"
+      ],
+      "Default": "arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-alb-poc/9ab776c1316d5257/0472c148e64dab90"
+    }
+  },
+  "Outputs": {
+    "SecretKeyForAppUser": {
+      "Description": "Secret for User you only get this on creation of user",
+      "Value": {
+        "Fn::GetAtt": ["UserAccessKey", "SecretAccessKey"]
+      }
+    }
+  },
+  "Resources": {
+    "AppGroup": {
+      "Type": "AWS::IAM::Group"
+    },
+    "AppUser": {
+      "Type": "AWS::IAM::User",
+      "Properties": {
+        "UserName": {
+          "Fn::Sub": "svc-${AppName}"
+        },
+        "Path": "/"
+      },
+      "DependsOn": ["AppGroup"]
+    },
+    "UserAccessKey": {
+      "Type": "AWS::IAM::AccessKey",
+      "Properties": {
+        "UserName": {
+          "Ref": "AppUser"
+        }
+      },
+      "DependsOn": ["AppUser"]
+    },
+    "AddUserToGroup": {
+      "Type": "AWS::IAM::UserToGroupAddition",
+      "Properties": {
+        "GroupName": {
+          "Ref": "AppGroup"
+        },
+        "Users": [{
+          "Ref": "AppUser"
+        }]
+      },
+      "DependsOn": ["AppUser", "AppGroup"]
+    },
+    "ECR": {
+      "Type": "AWS::ECR::Repository",
+      "Properties": {
+        "RepositoryName": {
+          "Fn::Sub": "${AppName}"
+        },
+        "RepositoryPolicyText": {
+          "Version": "2008-10-17",
+          "Statement": [{
+            "Sid": "AllowPushPull",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": [{
+                "Fn::GetAtt": ["AppUser", "Arn"]
+              }]
+            },
+            "Action": [
+              "ecr:GetDownloadUrlForLayer",
+              "ecr:BatchGetImage",
+              "ecr:BatchCheckLayerAvailability",
+              "ecr:PutImage",
+              "ecr:InitiateLayerUpload",
+              "ecr:UploadLayerPart",
+              "ecr:CompleteLayerUpload"
+            ]
+          }]
+        }
+      },
+      "DependsOn": ["AppUser"]
+    },
+    "TaskDefinition": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "ExecutionRoleArn": "",
+        "Memory": 250,
+        "NetworkMode": "bridge",
+        "ContainerDefinitions": [{
+          "Name": {
+            "Ref": "AppName"
+          },
+          "Image": {
+            "Fn::Sub": "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${AppName}:latest"
+          },
+          "PortMappings": [{
+              "ContainerPort": 80,
+              "HostPort": {
+                "Ref": "AppPort"
+              }
+            },
+            {
+              "ContainerPort": 443,
+              "HostPort": {
+                "Ref": "AppPortSSL"
+              }
+            }
+          ],
+          "LogConfiguration": {
+            "LogDriver": "awslogs",
+            "Options": {
+              "awslogs-group": {
+                "Ref": "LogGroup"
+              },
+              "awslogs-region": {
+                "Ref": "AWS::Region"
+              },
+              "awslogs-stream-prefix": "web"
+            }
+          },
+          "Memory": 250,
+          "MountPoints": [{
+            "SourceVolume": "shared",
+            "ContainerPath": "/opt/shared"
+          }]
+        }],
+        "Volumes": [{
+          "Name": "shared",
+          "Host": {
+            "SourcePath": "/opt/shared"
+          }
+        }]
+      },
+      "DependsOn": ["ECR"]
+    },
+    "ClusterService": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "ServiceName": {
+          "Ref": "AppName"
+        },
+        "Cluster": {
+          "Ref": "Cluster"
+        },
+        "DesiredCount": {
+          "Ref": "DesiredCount"
+        },
+        "DeploymentConfiguration": {
+          "MaximumPercent": 100,
+          "MinimumHealthyPercent": 0
+        },
+        "TaskDefinition": {
+          "Ref": "TaskDefinition"
+        }
+      },
+      "DependsOn": ["TaskDefinition"]
+    },
+    "TargetGroup": {
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+      "Properties": {
+        "HealthCheckIntervalSeconds": 30,
+        "HealthCheckProtocol": "HTTP",
+        "HealthCheckTimeoutSeconds": 10,
+        "HealthyThresholdCount": 4,
+        "Matcher": {
+          "HttpCode": "200"
+        },
+        "Port": {
+          "Ref": "AppPort"
+        },
+        "Protocol": "HTTP",
+        "TargetGroupAttributes": [{
+            "Key": "deregistration_delay.timeout_seconds",
+            "Value": "300"
+          },
+          {
+            "Key": "stickiness.enabled",
+            "Value": false
+          }
+        ],
+        "UnhealthyThresholdCount": 2,
+        "VpcId": {
+          "Ref": "VPCId"
+        },
+        "Tags": [{
+            "Key": "parent_project",
+            "Value": {
+              "Ref": "ParentProjectTag"
+            }
+          },
+          {
+            "Key": "environment",
+            "Value": {
+              "Ref": "EnvironmentTag"
+            }
+          },
+          {
+            "Key": "billing_ref",
+            "Value": {
+              "Ref": "BillingRefTag"
+            }
+          },
+          {
+            "Key": "application",
+            "Value": {
+              "Ref": "ApplicationTag"
+            }
+          },
+          {
+            "Key": "key_contact",
+            "Value": {
+              "Ref": "KeyContact"
+            }
+          },
+          {
+            "Key": "project",
+            "Value": {
+              "Ref": "ProjectTag"
+            }
+          },
+          {
+            "Key": "STAGE",
+            "Value": {
+              "Ref": "STAGETag"
+            }
+          }
+        ]
+      },
+      "DependsOn": ["ClusterService"]
+    },
+    "TargetGroupSSL": {
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+      "Properties": {
+        "HealthCheckIntervalSeconds": 30,
+        "HealthCheckProtocol": "HTTPS",
+        "HealthCheckTimeoutSeconds": 10,
+        "HealthyThresholdCount": 4,
+        "Matcher": {
+          "HttpCode": "200"
+        },
+        "Port": {
+          "Ref": "AppPortSSL"
+        },
+        "Protocol": "HTTPS",
+        "TargetGroupAttributes": [{
+            "Key": "deregistration_delay.timeout_seconds",
+            "Value": "300"
+          },
+          {
+            "Key": "stickiness.enabled",
+            "Value": false
+          }
+        ],
+        "UnhealthyThresholdCount": 2,
+        "VpcId": {
+          "Ref": "VPCId"
+        },
+        "Tags": [{
+            "Key": "parent_project",
+            "Value": {
+              "Ref": "ParentProjectTag"
+            }
+          },
+          {
+            "Key": "environment",
+            "Value": {
+              "Ref": "EnvironmentTag"
+            }
+          },
+          {
+            "Key": "billing_ref",
+            "Value": {
+              "Ref": "BillingRefTag"
+            }
+          },
+          {
+            "Key": "application",
+            "Value": {
+              "Ref": "ApplicationTag"
+            }
+          },
+          {
+            "Key": "key_contact",
+            "Value": {
+              "Ref": "KeyContact"
+            }
+          },
+          {
+            "Key": "project",
+            "Value": {
+              "Ref": "ProjectTag"
+            }
+          },
+          {
+            "Key": "STAGE",
+            "Value": {
+              "Ref": "STAGETag"
+            }
+          }
+        ]
+      },
+      "DependsOn": ["ClusterService"]
+    },
+    "ListenerRuleHttps": {
+      "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
+      "Properties": {
+        "Actions": [{
+          "Type": "forward",
+          "TargetGroupArn": {
+            "Ref": "TargetGroupSSL"
+          }
+        }],
+        "Conditions": [{
+          "Field": "host-header",
+          "Values": [{
+            "Ref": "UniqueDomainName"
+          }]
+        }],
+        "ListenerArn": {
+          "Ref": "SSLListenerArn"
+        },
+        "Priority": {
+          "Ref": "AppPortSSL"
+        }
+      },
+      "DependsOn": ["TargetGroup"]
+    },
+    "ListenerRuleHttp": {
+      "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
+      "Properties": {
+        "Actions": [{
+          "Type": "forward",
+          "TargetGroupArn": {
+            "Ref": "TargetGroup"
+          }
+        }],
+        "Conditions": [{
+          "Field": "host-header",
+          "Values": [{
+            "Ref": "UniqueDomainName"
+          }]
+        }],
+        "ListenerArn": {
+          "Ref": "ListenerArn"
+        },
+        "Priority": {
+          "Ref": "AppPort"
+        }
+      },
+      "DependsOn": ["TargetGroup"]
+    },
+    "Route53": {
+      "Type": "AWS::Route53::RecordSet",
+      "Properties": {
+        "HostedZoneId": "ZJ9T4VL4W96G4",
+        "Comment": "DNS For the Docker Image",
+        "Name": {
+          "Ref": "UniqueDomainName"
+        },
+        "Type": "A",
+        "AliasTarget": {
+          "DNSName": "cat-alb-poc-159369285.eu-west-1.elb.amazonaws.com",
+          "HostedZoneId": {
+            "Ref": "HostedZone"
+          }
+        }
+      }
+    },
+    "S3EnvAdditionsBucketPolicyForTravis": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": {
+          "Fn::Sub": "access-to-s3-travis-${AppName}"
+        },
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [{
+              "Action": ["s3:ListBucket"],
+              "Resource": [{
+                "Fn::Sub": "arn:aws:s3:::det-${AppName}"
+              }],
+              "Effect": "Allow"
+            },
+            {
+              "Action": ["*"],
+              "Resource": [{
+                "Fn::Sub": "arn:aws:s3:::det-${AppName}/*"
+              }],
+              "Effect": "Allow"
+            }
+          ]
+        },
+        "Groups": ["CIGroup"]
+      },
+      "DependsOn": ["S3Bucket"]
+    },
+    "S3BucketPolicy": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": {
+          "Fn::Sub": "access-to-s3-default-${AppName}"
+        },
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [{
+              "Action": ["s3:ListBucket"],
+              "Resource": [{
+                "Fn::Sub": "arn:aws:s3:::det-${AppName}"
+              }],
+              "Effect": "Allow"
+            },
+            {
+              "Action": ["*"],
+              "Resource": [{
+                "Fn::Sub": "arn:aws:s3:::det-${AppName}/*"
+              }],
+              "Effect": "Allow"
+            }
+          ]
+        },
+        "Groups": [{
+          "Ref": "AppGroup"
+        }]
+      },
+      "DependsOn": ["S3Bucket"]
+    },
+    "S3Bucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": {
+          "Fn::Sub": "det-${AppName}"
+        },
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        },
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        },
+        "Tags": [{
+            "Key": "parent_project",
+            "Value": {
+              "Ref": "ParentProjectTag"
+            }
+          },
+          {
+            "Key": "environment",
+            "Value": {
+              "Ref": "EnvironmentTag"
+            }
+          },
+          {
+            "Key": "billing_ref",
+            "Value": {
+              "Ref": "BillingRefTag"
+            }
+          },
+          {
+            "Key": "application",
+            "Value": {
+              "Ref": "ApplicationTag"
+            }
+          },
+          {
+            "Key": "key_contact",
+            "Value": {
+              "Ref": "KeyContact"
+            }
+          },
+          {
+            "Key": "STAGE",
+            "Value": {
+              "Ref": "STAGETag"
+            }
+          }
+        ]
+      }
+    },
+    "SQSDefaultActive": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "VisibilityTimeout": 43200,
+        "QueueName": {
+          "Fn::Sub": "${AppName}-default-${AppEnv}"
+        }
+      }
+    },
+    "SQSPolicyActive": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": {
+          "Fn::Sub": "access-to-sqs-${AppName}-${AppEnv}"
+        },
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [{
+            "Action": ["sqs:*"],
+            "Resource": {
+              "Fn::Sub": "arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:${AppName}-*-${AppEnv}"
+            },
+            "Effect": "Allow"
+          }]
+        },
+        "Groups": [{
+          "Ref": "AppGroup"
+        }]
+      }
+    }
+  }
+}

@@ -1,0 +1,128 @@
+language: php
+sudo: required
+dist: trusty
+php:
+- '7.2'
+addons:
+  mariadb: '10.2'
+  apt:
+    packages:
+    - python3
+    - python3-pip
+services:
+- mysql
+notifications:
+  email: false
+  slack:
+    secure: qMTwcbvrGT0G7NgkGH/xyyoqF/HeicGztYXEicSyVz83BYtA9uQr8osW3BaQ5it+h48W7i4KnNm0yV4nHrlpboh8qbuzTAL+VYvqb8Fks+7QADpRho1q2pK23KjEbb2aB53WzKh1kktrEzaTmUn3dbDbrjCScvs98G9dgElXq3mQXGu6m2Q71lxFUzvqA/TTDi54KlYMiSTXSzBTc2ndgDVKVJna9Dg78YBP9X7wZEXJAEdOdqECswi1YDqTMEX13fp1+rpRrr0aLrJtkvvpDeLXAiBntSRaHtOv0sZHZ0AuT2fh53fzIsAsFmmbQirBPQbJvb9e5sZRomGOirnNcFYVUvflGtLQu2AiXPp5sLVCZZd0bX3wL7H0j7KCscmGhzB3FRpJOxHcY8XGQaWLX9qpA6SylR8NIjyiXpFt2BjXHsjoHcmKKMwW8SoF/FAsP695cl0xbOZ0orqLzwpMh9CCuHmXrjqU+rsa9O5xyfwuGDLdM6E5e0u2IEVR9zyW4kd1PI0AJfVxDZ1dV+rs3RxTRae5abGdcjMs9Kj84uTXlZF6EAFWTDKItJpOeXrU5/sMdZNeBQ9dh94a7wtQltRqJpFh7dyU1SGXQTuoV1rL1Tt3duIK19/FjxNd10HtpID5djFZeIHbbeNk1EFAIushdD4wQL2lcrkURIyNRmI=
+cache:
+  directories:
+  - "$COMPOSER_CACHE_DIR"
+  - "$HOME/.composer/cache"
+  - vendor
+  - node_modules
+after_success:
+- pip install --user awscli
+- sudo pip install -r deploy/requirements.txt
+before_deploy:
+- php artisan clear-compiled
+- php artisan view:clear
+- php artisan cache:clear
+- export APP_ENV=production
+- composer install --no-dev --prefer-dist --no-interaction
+- rm .env
+- echo "" > storage/logs/laravel.log
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: bash deploy/travis_deploy.sh
+  on:
+    branch: mainline
+before_script:
+- google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost
+  &
+- cp .env.travis .env.dusk.testing
+- sed -i -- 's|QUEUE_DRIVER=sync|QUEUE_DRIVER=null|g' .env.dusk.testing
+- mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+- cp .env.travis .env
+- export APP_ENV=testing
+- npm install
+- npm run production
+- git clone https://${GITHUB_TOKEN}@github.com/pfizer/cat-quality-script.git
+- sudo pip3 install -r cat-quality-script/requirements.txt
+- composer self-update
+- composer global require phpmetrics/phpmetrics:^2.4
+- composer config -g github-oauth.github.com ${GITHUB_TOKEN}
+- composer update --prefer-dist --no-interaction
+script:
+- set -e
+- vendor/bin/phpcs --standard=psr2 app/
+- "~/.composer/vendor/bin/phpmetrics --report-json=report.json app"
+- python3 cat-quality-script/quality_service_client_run.py report.json
+- vendor/bin/phpunit --coverage-clover clover.xml --stop-on-failure
+- php ./coverage-checker.php clover.xml 70
+language: php
+sudo: required
+dist: trusty
+php:
+- '7.2'
+addons:
+  mariadb: '10.2'
+  apt:
+    packages:
+    - python3
+    - python3-pip
+services:
+- mysql
+notifications:
+  email: false
+  slack:
+    secure: qMTwcbvrGT0G7NgkGH/xyyoqF/HeicGztYXEicSyVz83BYtA9uQr8osW3BaQ5it+h48W7i4KnNm0yV4nHrlpboh8qbuzTAL+VYvqb8Fks+7QADpRho1q2pK23KjEbb2aB53WzKh1kktrEzaTmUn3dbDbrjCScvs98G9dgElXq3mQXGu6m2Q71lxFUzvqA/TTDi54KlYMiSTXSzBTc2ndgDVKVJna9Dg78YBP9X7wZEXJAEdOdqECswi1YDqTMEX13fp1+rpRrr0aLrJtkvvpDeLXAiBntSRaHtOv0sZHZ0AuT2fh53fzIsAsFmmbQirBPQbJvb9e5sZRomGOirnNcFYVUvflGtLQu2AiXPp5sLVCZZd0bX3wL7H0j7KCscmGhzB3FRpJOxHcY8XGQaWLX9qpA6SylR8NIjyiXpFt2BjXHsjoHcmKKMwW8SoF/FAsP695cl0xbOZ0orqLzwpMh9CCuHmXrjqU+rsa9O5xyfwuGDLdM6E5e0u2IEVR9zyW4kd1PI0AJfVxDZ1dV+rs3RxTRae5abGdcjMs9Kj84uTXlZF6EAFWTDKItJpOeXrU5/sMdZNeBQ9dh94a7wtQltRqJpFh7dyU1SGXQTuoV1rL1Tt3duIK19/FjxNd10HtpID5djFZeIHbbeNk1EFAIushdD4wQL2lcrkURIyNRmI=
+cache:
+  directories:
+  - "$COMPOSER_CACHE_DIR"
+  - "$HOME/.composer/cache"
+  - vendor
+  - node_modules
+after_success:
+- sudo pip install -r deploy/requirements.txt
+before_deploy:
+- php artisan clear-compiled
+- php artisan view:clear
+- php artisan cache:clear
+- export APP_ENV=production
+- composer install --no-dev --prefer-dist --no-interaction
+- rm .env
+- rm private_key_box.pem
+- echo "" > storage/logs/laravel.log
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: bash deploy/travis_deploy.sh
+  on:
+    branch: mainline
+before_script:
+- pip install --user awscli
+- google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost
+  &
+- cp .env.travis .env.dusk.testing
+- sed -i -- 's|QUEUE_DRIVER=sync|QUEUE_DRIVER=null|g' .env.dusk.testing
+- mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+- cp .env.travis .env
+- aws s3 cp s3://det-$APP_NAME/provision/$STACK_ENV_TAG/private_key_box_sandbox.pem private_key_box.pem
+- export APP_ENV=testing
+- npm install
+- npm run production
+- git clone https://${GITHUB_TOKEN}@github.com/pfizer/cat-quality-script.git
+- sudo pip3 install -r cat-quality-script/requirements.txt
+- composer self-update
+- composer global require phpmetrics/phpmetrics:^2.4
+- composer config -g github-oauth.github.com ${GITHUB_TOKEN}
+- composer update --prefer-dist --no-interaction
+script:
+- set -e
+- vendor/bin/phpcs --standard=psr2 app/
+- "~/.composer/vendor/bin/phpmetrics --report-json=report.json app"
+- python3 cat-quality-script/quality_service_client_run.py report.json
+- vendor/bin/phpunit --coverage-clover clover.xml --stop-on-failure
+- php ./coverage-checker.php clover.xml 70

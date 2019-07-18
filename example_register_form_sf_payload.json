@@ -1,0 +1,90 @@
+{
+    "steps": {
+        "project_information": {
+            "fields": {
+                "vendor_agency": {
+                    "sort": 1,
+                    "active": false,
+                    "show_element": "hidden",
+                    "field_element": "date_year_month",
+                    "default_value": "Name of Application",
+                    "title": "Name",
+                    "tooltip": "Hey there",
+                    "rules": "required|min:3|max:30"
+                },
+                "application_overview": {
+                    "sort": 3,
+                    "show_element": "p",
+                    "field_element": "select",
+                    "default_value": "{{ name.default_value }} is a PHP Laravel application with an AngularJS front end, built on AWS. The application functionality enables users to __.\r\n \r\n**Key features**\r\n \r\n  - Import bulk legacy data from Google Analytics \r\n  - Automatically import daily data from Google Analytics \r\n  - Display data in practical charts \r\n  - Filter data with date range and site/property",
+                    "title": "Application Overview",
+                    "options": [
+                        {
+                            "foo": "bar"
+                        }
+                    ]
+                },
+                "project_deliverables": {
+                    "sort": 3,
+                    "show_element": "p",
+                    "field_element": "select",
+                    "default_value": "{{ name.default_value }} is a PHP Laravel application with an AngularJS front end, built on AWS. The application functionality enables users to __.\r\n \r\n**Key features**\r\n \r\n  - Import bulk legacy data from Google Analytics \r\n  - Automatically import daily data from Google Analytics \r\n  - Display data in practical charts \r\n  - Filter data with date range and site/property",
+                    "title": "Application Overview",
+                    "options": [
+                        {
+                            "foo": "bar"
+                        }
+                    ]
+                }
+            },
+            "values": [
+                {
+                    "name": "foo",
+                    "application_overview": "bar"
+                }
+            ],
+            "validation": [
+                {
+                    "name": []
+                },
+                {
+                    "application_overview": ["not long enough"]
+                }
+            ]
+        },
+        "calendar_details": {
+            "fields": {
+                "foo": {
+                    "sort": 1,
+                    "show_element": "hidden",
+                    "field_element": "input",
+                    "default_value": "Name of Application",
+                    "title": "Name",
+                    "rules": "required|min:3|max:30"
+                },
+                "bar": {
+                    "sort": 3,
+                    "show_element": "p",
+                    "field_element": "textarea",
+                    "default_value": "{{ name.default_value }} is a PHP Laravel application with an AngularJS front end, built on AWS. The application functionality enables users to __.\r\n \r\n**Key features**\r\n \r\n  - Import bulk legacy data from Google Analytics \r\n  - Automatically import daily data from Google Analytics \r\n  - Display data in practical charts \r\n  - Filter data with date range and site/property",
+                    "title": "Application Overview"
+                }
+            },
+            "values": [
+                {
+                    "foo": "baz",
+                    "bar": "boo"
+                }
+            ],
+            "validation": [
+                {
+                    "foo": []
+                },
+                {
+                    "bar": ["not long enough", "not unique"]
+                }
+            ]
+        }
+    },
+    "overall_state": "saved" //complete, pending etc
+}

@@ -1,0 +1,4 @@
+requests
+boto3>=1.5.18
+awscli
+python-dotenv

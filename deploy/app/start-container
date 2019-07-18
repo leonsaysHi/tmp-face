@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+cd /app
+php artisan migrate --force
+php artisan config:clear
+php artisan queue:restart
+php artisan db:refresh
+chown -R nginx.nginx /app/storage
+/usr/sbin/nginx
+
+# start supervisord
+/usr/bin/supervisord -c /etc/supervisord.conf

@@ -1,0 +1,84 @@
+{
+    "pipelineName": "testbuild-staging-Pipeline-6VL710F7OIH6",
+    "pipelineVersion": 4,
+    "stageStates": [{
+        "stageName": "Source",
+        "actionStates": [{
+            "actionName": "Source",
+            "currentRevision": {
+                "revisionId": "H.UE.o8nkSa1PAgR9U3aRs0lkWQsxpMP"
+            },
+            "latestExecution": {
+                "status": "Succeeded",
+                "summary": "Amazon S3 version id: H.UE.o8nkSa1PAgR9U3aRs0lkWQsxpMP",
+                "lastStatusChange": "",
+                "externalExecutionId": "H.UE.o8nkSa1PAgR9U3aRs0lkWQsxpMP"
+            },
+            "entityUrl": "https://console.aws.amazon.com/s3/home?#"
+        }],
+        "latestExecution": {
+            "pipelineExecutionId": "80c14ab8-4afc-42f6-98db-18f4c6a03bab",
+            "status": "Succeeded"
+        }
+    }, {
+        "stageName": "Build",
+        "inboundTransitionState": {
+            "enabled": "True"
+        },
+        "actionStates": [{
+            "actionName": "Build",
+            "latestExecution": {
+                "status": "Succeeded",
+                "lastStatusChange": "datetime.datetime(2018, 11, 27, 8, 50, 55, 614000, tzinfo = tzlocal())",
+                "externalExecutionId": "testbuild-staging:c118f6de-2af4-458e-852f-7825b91d8683",
+                "externalExecutionUrl": "https://eu-west-1.console.aws.amazon.com/codebuild/home?#/builds/testbuild-staging:c118f6de-2af4-458e-852f-7825b91d8683/view/new"
+            },
+            "entityUrl": "https://eu-west-1.console.aws.amazon.com/codebuild/home?#/projects/testbuild-staging/view"
+        }, {
+            "actionName": "ProductionBuild",
+            "latestExecution": {
+                "status": "Succeeded",
+                "lastStatusChange": "datetime.datetime(2018, 11, 27, 8, 50, 25, 820000, tzinfo = tzlocal())",
+                "externalExecutionId": "testbuild-production:79bcfac5-225f-4742-80ef-bd27875267af",
+                "externalExecutionUrl": "https://eu-west-1.console.aws.amazon.com/codebuild/home?#/builds/testbuild-production:79bcfac5-225f-4742-80ef-bd27875267af/view/new"
+            },
+            "entityUrl": "https://eu-west-1.console.aws.amazon.com/codebuild/home?#/projects/testbuild-production/view"
+        }],
+        "latestExecution": {
+            "pipelineExecutionId": "80c14ab8-4afc-42f6-98db-18f4c6a03bab",
+            "status": "Succeeded"
+        }
+    }, {
+        "stageName": "Deploy",
+        "inboundTransitionState": {
+            "enabled": "True"
+        },
+        "actionStates": [{
+            "actionName": "UpdateService",
+            "latestExecution": {
+                "status": "Succeeded",
+                "summary": "Cluster: default service: testbuild-staging-006 status: FINISHED",
+                "lastStatusChange": "datetime.datetime(2018, 11, 27, 8, 51, 29, 969000, tzinfo = tzlocal())",
+                "externalExecutionId": "arn:aws:ecs:eu-west-1:364215618558:task-definition/testbuild-staging-TaskDefinition-BNINTKC4F54F:21",
+                "externalExecutionUrl": "https://eu-west-1.console.aws.amazon.com/ecs/home?#/clusters/default/services/testbuild-staging-006/deployments"
+            },
+            "entityUrl": "https://eu-west-1.console.aws.amazon.com/ecs/home?#/clusters/default/services/testbuild-staging-006/details"
+        }],
+        "latestExecution": {
+            "pipelineExecutionId": "80c14ab8-4afc-42f6-98db-18f4c6a03bab",
+            "status": "Succeeded"
+        }
+    }],
+    "created": "datetime.datetime(2018, 11, 2, 13, 15, 27, 796000, tzinfo = tzlocal())",
+    "updated": "datetime.datetime(2018, 11, 26, 20, 3, 11, 868000, tzinfo = tzlocal())",
+    "ResponseMetadata": {
+        "RequestId": "6c66cd40-aa4a-4257-b6e4-8c59696208a7",
+        "HTTPStatusCode": 200,
+        "HTTPHeaders": {
+            "x-amzn-requestid": "6c66cd40-aa4a-4257-b6e4-8c59696208a7",
+            "content-type": "application/x-amz-json-1.1",
+            "content-length": "2465"
+        },
+        "RetryAttempts": 0
+    }
+}

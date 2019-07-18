@@ -1,5 +1,6 @@
 import 'babel-polyfill';
 require('./lodash');
+require('./bootstrap');
 
 window.moment = require('moment');
 
@@ -20,8 +21,9 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 import store from './store';
 
-/* Dev only */
-Vue.component('styleguide', require('./components/Styleguide.vue').default);
+/* Screens */
+Vue.component('styleguide', require('./screens/Styleguide.vue').default);
+Vue.component('home', require('./screens/Home.vue').default);
 
 /* Components */
 Vue.component('topbar', require('./components/Topbar.vue').default);

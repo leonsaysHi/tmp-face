@@ -1,0 +1,659 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Build a Task Definition and deploy to docker ECS
+Mappings:
+  ShortenEnvNameForCFLimits:
+    production:
+      Name: prod
+    staging:
+      Name: stage
+    development:
+      Name: dev
+    uat:
+      Name: uat
+  Configuration:
+    uat:
+      SubnetId: subnet-04d2739af85597d5c
+      ClusterName: cat-platform-staging
+      StackEnvFileProduction: false
+      EC2SecurityGroup: sg-06da11f526b4c2a93
+      PfizerSSH: sg-0c3e1ddf99a86e220
+      EFSRoute: 'fs-5350f89b.efs.eu-west-1.amazonaws.com'
+      HostedZone: 'ZJ9T4VL4W96G4'
+      VpcID: 'vpc-093d2efc0a28fefc2'
+      ALBDNSName: 'cat-plaform-staging-783672209.eu-west-1.elb.amazonaws.com'
+      ALBDNSNamePrivate: 'cat-platform-private-staging-477048154.eu-west-1.elb.amazonaws.com'
+      PipelineRole: 'arn:aws:iam::364215618558:role/service-role/cat-pipeline-role'
+      ListenerNonSSL: 'arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-plaform-staging/0964f66ca2f2956d/dbd84bbeeb7e5446'
+      ListenerSSL: 'arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-plaform-staging/0964f66ca2f2956d/7db6c5e64f4358b8'
+      ListenerNonSSLPrivate: 'arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-platform-private-staging/b94407d63c6447e7/12c2f5c22b2dd52f'
+      ListenerSSLPrivate: 'arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-platform-private-staging/b94407d63c6447e7/277b6a7bce41066c'
+    development:
+      SubnetId: subnet-04d2739af85597d5c
+      ClusterName: cat-platform-staging
+      StackEnvFileProduction: false
+      EC2SecurityGroup: sg-06da11f526b4c2a93
+      PfizerSSH: sg-0c3e1ddf99a86e220
+      EFSRoute: 'fs-5350f89b.efs.eu-west-1.amazonaws.com'
+      HostedZone: 'ZJ9T4VL4W96G4'
+      VpcID: 'vpc-093d2efc0a28fefc2'
+      ALBDNSName: 'cat-plaform-staging-783672209.eu-west-1.elb.amazonaws.com'
+      ALBDNSNamePrivate: 'cat-platform-private-staging-477048154.eu-west-1.elb.amazonaws.com'
+      PipelineRole: 'arn:aws:iam::364215618558:role/service-role/cat-pipeline-role'
+      ListenerNonSSL: 'arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-plaform-staging/0964f66ca2f2956d/dbd84bbeeb7e5446'
+      ListenerSSL: 'arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-plaform-staging/0964f66ca2f2956d/7db6c5e64f4358b8'
+      ListenerNonSSLPrivate: 'arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-platform-private-staging/b94407d63c6447e7/12c2f5c22b2dd52f'
+      ListenerSSLPrivate: 'arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-platform-private-staging/b94407d63c6447e7/277b6a7bce41066c'
+    staging:
+      SubnetId: subnet-04d2739af85597d5c
+      ClusterName: cat-platform-staging
+      StackEnvFileProduction: false
+      EC2SecurityGroup: sg-06da11f526b4c2a93
+      PfizerSSH: sg-0c3e1ddf99a86e220
+      EFSRoute: 'fs-5350f89b.efs.eu-west-1.amazonaws.com'
+      HostedZone: 'ZJ9T4VL4W96G4'
+      VpcID: 'vpc-093d2efc0a28fefc2'
+      ALBDNSName: 'cat-plaform-staging-783672209.eu-west-1.elb.amazonaws.com'
+      ALBDNSNamePrivate: 'cat-platform-private-staging-477048154.eu-west-1.elb.amazonaws.com'
+      PipelineRole: 'arn:aws:iam::364215618558:role/service-role/cat-pipeline-role'
+      ListenerNonSSL: 'arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-plaform-staging/0964f66ca2f2956d/dbd84bbeeb7e5446'
+      ListenerSSL: 'arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-plaform-staging/0964f66ca2f2956d/7db6c5e64f4358b8'
+      ListenerNonSSLPrivate: 'arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-platform-private-staging/b94407d63c6447e7/12c2f5c22b2dd52f'
+      ListenerSSLPrivate: 'arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-platform-private-staging/b94407d63c6447e7/277b6a7bce41066c'
+    production:
+      SubnetId: subnet-00f4aff7bc75e8261
+      EC2SecurityGroup: sg-0816610c86245d333
+      StackEnvFileProduction: true
+      PfizerSSH: sg-018c25a1939654ec1
+      ClusterName: cat-platform-production
+      ALBDNSName: 'cat-plaform-production-1946801102.eu-west-1.elb.amazonaws.com'
+      ALBDNSNamePrivate: 'cat-platform-private-production-530942397.eu-west-1.elb.amazonaws.com'
+      EFSRoute: 'fs-2ee844e6.efs.eu-west-1.amazonaws.com'
+      HostedZone: 'ZJ9T4VL4W96G4'
+      VpcID: 'vpc-04aec006fbb5e790d'
+      PipelineRole: 'arn:aws:iam::364215618558:role/service-role/cat-pipeline-role'
+      ListenerNonSSL: 'arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-plaform-production/4c92e1ef63a79150/247de9209d51d5c1'
+      ListenerSSL: 'arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-plaform-production/4c92e1ef63a79150/16b1757c1fcad993'
+      ListenerNonSSLPrivate: 'arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-platform-private-production/89251846fb480610/b52bafa5bcefd464'
+      ListenerSSLPrivate: 'arn:aws:elasticloadbalancing:eu-west-1:364215618558:listener/app/cat-platform-private-production/89251846fb480610/2664f8515bba99dc'
+Conditions:
+  IsPublicSite: !Equals
+    - !Ref PublicSite
+    - 'yes'
+Parameters:
+  Memory:
+    Type: Number
+    Default: 250
+    Description: Does it really need more megs?
+  HASH:
+    Type: String
+    Description: not required but it is the git commit hash
+    Default: 'PlaceHolder'
+  AdminPassword:
+    Type: String
+    Description: password for the default admin user
+    MinLength: '1'
+  AppEnv:
+    Type: String
+    Default: staging
+    Description: defaults to staging
+    AllowedValues:
+      - production
+      - staging
+      - development
+      - uat
+  PublicSite:
+    Type: String
+    Description: Can the site be accessed from the general internet (yes) or only from Pfizer network (no)
+    Default: 'no'
+    AllowedValues:
+      - 'yes'
+      - 'no'
+  AppName:
+    Type: String
+    Description:
+      smartcompare, smarttest or crt (all lowercase, can have number),
+      etc. This will also be the S3 bucket name
+    MinLength: '1'
+  AppID:
+    Type: Number
+    Description: 'You can get this by scanning ports see https://www.pfi.sr/Z2J'
+    Default: 111
+  AppID2:
+    Type: Number
+    Description: 'You can get this by scanning ports see https://www.pfi.sr/Z2J'
+    Default: 111
+  Version:
+    Type: String
+    Description:
+      Helps with updating TargetGroups due to AWS limit just bump it up
+      from 001
+    MinLength: '3'
+    Default: '001'
+  UniqueDomainName:
+    Default: foo-qa.digitalpfizer.com
+    Type: String
+    Description: e.g. foo-qa.digitalpfizer.com
+  UniqueDomainName2:
+    Default: foo-qa.digitalpfizer.com
+    Type: String
+    Description: e.g. foo-qa.digitalpfizer.com
+  ParentProjectTag:
+    Type: String
+    Description: parent_project tags
+    MinLength: '1'
+  BillingRefTag:
+    Type: String
+    Description: billing_ref tags
+    MinLength: '1'
+  ApplicationTag:
+    Type: String
+    Description: application tags more of a human readable name
+    MinLength: '1'
+  KeyContact:
+    Type: String
+    Description: key_contact tag
+    MinLength: '1'
+  ProjectTag:
+    Type: String
+    Description: project tag
+    MinLength: '1'
+  BuildType:
+    Type: String
+    Default: 'LINUX_CONTAINER'
+    Description: The build container type to use for building the app
+  BuildComputeType:
+    Type: String
+    Default: 'BUILD_GENERAL1_SMALL'
+    Description: The build compute type to use for building the app
+  BuildImage:
+    Type: String
+    Default: 'aws/codebuild/docker:17.09.0'
+    Description: The build image to use for building the app
+Outputs:
+  SecretKeyForAppUser:
+    Description: Secret for User you only get this on creation of user
+    Value: !GetAtt 'UserAccessKey.SecretAccessKey'
+  PipelineUrl:
+    Value: !Sub https://console.aws.amazon.com/codepipeline/home?region=${AWS::Region}#/view/${Pipeline}
+    Description: CodePipeline URL
+Resources:
+  AppGroup:
+    Type: AWS::IAM::Group
+  AppUser:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: !Sub 'svc-${AppName}-${AppEnv}'
+      Path: /
+    DependsOn:
+      - AppGroup
+  UserAccessKey:
+    Type: AWS::IAM::AccessKey
+    Properties:
+      UserName: !Ref 'AppUser'
+    DependsOn:
+      - AppUser
+  AddUserToGroup:
+    Type: AWS::IAM::UserToGroupAddition
+    Properties:
+      GroupName: !Ref 'AppGroup'
+      Users:
+        - !Ref 'AppUser'
+    DependsOn:
+      - AppUser
+      - AppGroup
+  ECR:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Sub '${AppName}'
+      RepositoryPolicyText:
+        Version: '2008-10-17'
+        Statement:
+          - Sid: AllowPushPull
+            Effect: Allow
+            Principal:
+              AWS:
+                - !GetAtt 'AppUser.Arn'
+            Action:
+              - ecr:GetDownloadUrlForLayer
+              - ecr:BatchGetImage
+              - ecr:BatchCheckLayerAvailability
+              - ecr:PutImage
+              - ecr:InitiateLayerUpload
+              - ecr:UploadLayerPart
+              - ecr:CompleteLayerUpload
+    DependsOn:
+      - AppUser
+  TaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ExecutionRoleArn: ''
+      Memory: !Ref Memory
+      NetworkMode: bridge
+      TaskRoleArn: arn:aws:iam::364215618558:role/cat-alb-task-iam-v2
+      ContainerDefinitions:
+        - Name: !Sub '${AppName}-${AppEnv}'
+          Image: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${AppName}:latest'
+          PortMappings:
+            - ContainerPort: 80
+              HostPort: 0
+            - ContainerPort: 443
+              HostPort: 0
+          Memory: !Ref Memory
+          MountPoints:
+            - SourceVolume: shared
+              ContainerPath: /opt/shared
+      Volumes:
+        - Name: shared
+          Host:
+            SourcePath: /opt/shared
+    DependsOn:
+      - ECR
+  ClusterService:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster: !FindInMap [Configuration, !Ref 'AppEnv', 'ClusterName']
+      ServiceName: !Sub '${AppName}-${AppEnv}-${Version}'
+      SchedulingStrategy: REPLICA
+      DesiredCount: 1
+      LoadBalancers:
+        - ContainerName: !Sub ${AppName}-${AppEnv}
+          ContainerPort: 443
+          TargetGroupArn: !Ref TargetGroupSSLv2
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 0
+      TaskDefinition: !Ref 'TaskDefinition'
+    DependsOn:
+      - ListenerRuleHttpsV2
+  TargetGroupSSLv2:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: '20'
+      HealthCheckIntervalSeconds: 30
+      HealthCheckProtocol: HTTPS
+      HealthCheckTimeoutSeconds: 10
+      HealthyThresholdCount: 4
+      Matcher:
+        HttpCode: '200,403,404,400,401,301,302'
+      Name: !Sub
+        - ${AppName}-${ShortenENV}-ssl-${Version}
+        - ShortenENV: !FindInMap
+            - ShortenEnvNameForCFLimits
+            - !Ref 'AppEnv'
+            - Name
+      Port: 443
+      Protocol: HTTPS
+      UnhealthyThresholdCount: 2
+      VpcId: !FindInMap [Configuration, !Ref 'AppEnv', 'VpcID']
+      Tags:
+        - Key: parent_project
+          Value: !Ref 'ParentProjectTag'
+        - Key: environment
+          Value: !Ref 'AppEnv'
+        - Key: billing_ref
+          Value: !Ref 'BillingRefTag'
+        - Key: application
+          Value: !Ref 'ApplicationTag'
+        - Key: key_contact
+          Value: !Ref 'KeyContact'
+        - Key: project
+          Value: !Ref 'ProjectTag'
+        - Key: STAGE
+          Value: !Ref 'AppEnv'
+  ListenerRuleHttpV2:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - Type: redirect
+          RedirectConfig:
+            Host: !Ref UniqueDomainName
+            Protocol: 'HTTPS'
+            Port: 443
+            StatusCode: 'HTTP_301'
+      Conditions:
+        - Field: host-header
+          Values:
+            - !Ref 'UniqueDomainName'
+      ListenerArn: !If
+        - IsPublicSite
+        - !FindInMap [Configuration, !Ref AppEnv, ListenerNonSSL]
+        - !FindInMap [Configuration, !Ref AppEnv, ListenerNonSSLPrivate]
+      Priority: !Ref 'AppID'
+    DependsOn:
+      - TargetGroupSSLv2
+  ListenerRuleHttpsV2:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref 'TargetGroupSSLv2'
+      Conditions:
+        - Field: host-header
+          Values:
+            - !Ref 'UniqueDomainName'
+      ListenerArn: !If
+        - IsPublicSite
+        - !FindInMap [Configuration, !Ref AppEnv, ListenerSSL]
+        - !FindInMap [Configuration, !Ref AppEnv, ListenerSSLPrivate]
+      Priority: !Ref 'AppID'
+    DependsOn:
+      - TargetGroupSSLv2
+  Route53:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !FindInMap [Configuration, !Ref 'AppEnv', 'HostedZone']
+      Comment: DNS For the Docker Image
+      Name: !Ref 'UniqueDomainName'
+      Type: A
+      AliasTarget:
+        DNSName: !If
+          - IsPublicSite
+          - !FindInMap [Configuration, !Ref AppEnv, ALBDNSName]
+          - !FindInMap [Configuration, !Ref AppEnv, ALBDNSNamePrivate]
+        HostedZoneId: Z32O12XQLNTSW2
+  ListenerRuleHttp:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - Type: redirect
+          RedirectConfig:
+            Host: !Ref 'UniqueDomainName2'
+            Protocol: 'HTTPS'
+            Port: 443
+            StatusCode: 'HTTP_301'
+      Conditions:
+        - Field: host-header
+          Values:
+            - !Ref 'UniqueDomainName2'
+      ListenerArn: !If
+        - IsPublicSite
+        - !FindInMap [Configuration, !Ref AppEnv, ListenerNonSSL]
+        - !FindInMap [Configuration, !Ref AppEnv, ListenerNonSSLPrivate]
+      Priority: !Ref 'AppID2'
+    DependsOn:
+      - TargetGroupSSLv2
+  ListenerRuleHttps:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref 'TargetGroupSSLv2'
+      Conditions:
+        - Field: host-header
+          Values:
+            - !Ref 'UniqueDomainName2'
+      ListenerArn: !If
+        - IsPublicSite
+        - !FindInMap [Configuration, !Ref AppEnv, ListenerSSL]
+        - !FindInMap [Configuration, !Ref AppEnv, ListenerSSLPrivate]
+      Priority: !Ref 'AppID2'
+    DependsOn:
+      - TargetGroupSSLv2
+  S3BucketPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: !Sub 'access-to-s3-default-${AppName}'
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Action:
+              - s3:ListBucket
+            Resource:
+              - !Sub 'arn:aws:s3:::det-${AppName}'
+            Effect: Allow
+          - Action:
+              - '*'
+            Resource:
+              - !Sub 'arn:aws:s3:::det-${AppName}/*'
+            Effect: Allow
+      Groups:
+        - !Ref 'AppGroup'
+    DependsOn:
+      - S3Bucket
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'det-${AppName}'
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      VersioningConfiguration:
+        Status: Enabled
+      Tags:
+        - Key: parent_project
+          Value: !Ref 'ParentProjectTag'
+        - Key: environment
+          Value: !Ref 'AppEnv'
+        - Key: billing_ref
+          Value: !Ref 'BillingRefTag'
+        - Key: application
+          Value: !Ref 'ApplicationTag'
+        - Key: key_contact
+          Value: !Ref 'KeyContact'
+        - Key: STAGE
+          Value: !Ref 'AppEnv'
+  SQSDefaultActive:
+    Type: AWS::SQS::Queue
+    Properties:
+      VisibilityTimeout: 43200
+      QueueName: !Sub '${AppName}-default-${AppEnv}'
+  SQSPolicyActive:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: !Sub 'access-to-sqs-${AppName}-${AppEnv}'
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Action:
+              - sqs:*
+            Resource: !Sub 'arn:aws:sqs:${AWS::Region}:${AWS::AccountId}:${AppName}-*-${AppEnv}'
+            Effect: Allow
+      Groups:
+        - !Ref 'AppGroup'
+  Pipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      RoleArn: !FindInMap [Configuration, !Ref 'AppEnv', 'PipelineRole']
+      Stages:
+        - Name: Source
+          Actions:
+            - InputArtifacts: []
+              Name: Source
+              ActionTypeId:
+                Category: Source
+                Owner: AWS
+                Version: '1'
+                Provider: S3
+              OutputArtifacts:
+                - Name: SourceArtifacts
+              Configuration:
+                PollForSourceChanges: false
+                S3Bucket: !Sub det-${AppName}
+                S3ObjectKey: 'provision/staging/latest.zip'
+              RunOrder: 1
+        - Name: Build
+          Actions:
+            - Name: Build
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Version: '1'
+                Provider: CodeBuild
+              InputArtifacts:
+                - Name: SourceArtifacts
+              OutputArtifacts:
+                - Name: BuildArtifacts
+              Configuration:
+                ProjectName: !Ref CodeBuildDeploySite
+              RunOrder: 1
+            - Name: ProductionBuild
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Version: '1'
+                Provider: CodeBuild
+              InputArtifacts:
+                - Name: SourceArtifacts
+              OutputArtifacts:
+                - Name: ProdBuildArtifacts
+              Configuration:
+                ProjectName: !Ref CodeBuildDeployProductionSite
+              RunOrder: 1
+        - Name: Deploy
+          Actions:
+            - Name: UpdateService
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Version: '1'
+                Provider: ECS
+              InputArtifacts:
+                - Name: SourceArtifacts
+              Configuration:
+                ClusterName:
+                  !FindInMap [Configuration, !Ref 'AppEnv', 'ClusterName']
+                FileName: 'imagedefinitions.json'
+                ServiceName: !Sub ${AppName}-${AppEnv}-${Version}
+              RunOrder: 1
+      ArtifactStore:
+        Type: S3
+        Location: !Sub det-${AppName}
+  CodeBuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - codebuild.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: '/'
+      Policies:
+        - PolicyName: codebuild-service
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: '*'
+            Version: '2012-10-17'
+  CodeBuildDeploySite:
+    Type: AWS::CodeBuild::Project
+    DependsOn: CodeBuildRole
+    Properties:
+      Name: !Sub ${AppName}-${AppEnv}
+      Description: Deploy site to S3
+      ServiceRole: !GetAtt CodeBuildRole.Arn
+      Artifacts:
+        Type: CODEPIPELINE
+      Environment:
+        Type: !Ref BuildType
+        ComputeType: !Ref BuildComputeType
+        Image: !Sub ${BuildImage}
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: !Sub |
+          version: 0.0
+          containers:
+              ApplicationSetup:
+                  phases:
+                      pre_build:
+                          commands:
+                          - echo Logging in to Amazon ECR for region ${AWS::Region}
+                          - eval $(aws ecr get-login --no-include-email --region eu-west-1)
+                      build:
+                          commands:
+                          - aws s3 cp s3://det-cloudformation-backups/environments/${AppName}-${AppEnv} .env
+                          - aws s3 cp s3://det-cloudformation-backups/environments/env_core env_core
+                          - printf "\n# ENV CORE SETTINGS\n" >> .env
+                          - cat env_core >> .env
+                          - printf "\n# END ENV CORE SETTINGS\n" >> .env
+                          - rm env_core
+                          - aws s3 cp s3://det-testbuild/provision/${AppEnv}/env_additions env_additions
+                          - printf "\n# START ENV ADDITIONS SETTINGS\n" >> .env
+                          - cat env_additions >> .env
+                          - printf "\n# END ENV ADDITIONS SETTINGS\n" >> .env
+                          - rm env_additions
+                          - cp -rav deploy/app/* .
+                          #- should just push this part from travis in the zip
+                          #- will add back later
+                          #- npm install
+                          #- npm run production
+                          #- #will add this back later
+                          #- composer config -g github-oauth.github.com
+                          #- composer install --no-dev
+                          #- composer update --prefer-dist --no-interaction
+                          - docker build --pull -t ${AppName} .
+                          - docker tag ${AppName}:latest 364215618558.dkr.ecr.eu-west-1.amazonaws.com/${AppName}:latest
+                      post_build:
+                          commands:
+                          - echo Build completed on `date`
+                          - echo Pushing the Docker image...
+                          - docker push 364215618558.dkr.ecr.eu-west-1.amazonaws.com/${AppName}:latest
+          artifacts:
+              files: imagedefinitions.json
+      TimeoutInMinutes: 10
+  CodeBuildDeployProductionSite:
+    Type: AWS::CodeBuild::Project
+    DependsOn: CodeBuildRole
+    Properties:
+      Name: !Sub ${AppName}-production
+      Description: Deploy site to S3
+      ServiceRole: !GetAtt CodeBuildRole.Arn
+      Artifacts:
+        Type: CODEPIPELINE
+      Environment:
+        Type: !Ref BuildType
+        ComputeType: !Ref BuildComputeType
+        Image: !Sub ${BuildImage}
+        EnvironmentVariables:
+          - Name: StackEnvFileProduction
+            Type: PLAINTEXT
+            Value:
+              !FindInMap [
+                Configuration,
+                !Ref 'AppEnv',
+                'StackEnvFileProduction',
+              ]
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: !Sub |
+          version: 0.0
+          containers:
+              ApplicationSetup:
+                  phases:
+                      pre_build:
+                          commands:
+                          - echo Logging in to Amazon ECR for region ${AWS::Region}
+                          - eval $(aws ecr get-login --no-include-email --region ${AWS::Region})
+                      build:
+                          commands:
+                            - |
+                              if "$StackEnvFileProduction" = "true"; then
+                                HASH=$(git rev-parse HEAD)
+                                aws s3 cp s3://det-cloudformation-backups/environments/${AppName}-production .env
+                                aws s3 cp s3://det-cloudformation-backups/environments/env_core env_core
+                                printf "\n# ENV CORE SETTINGS\n" >> .env
+                                cat env_core >> .env
+                                printf "\n# END ENV CORE SETTINGS\n" >> .env
+                                rm env_core
+                                aws s3 cp s3://det-testbuild/provision/production/env_additions env_additions
+                                printf "\n# START ENV ADDITIONS SETTINGS\n" >> .env
+                                cat env_additions >> .env
+                                printf "\n# END ENV ADDITIONS SETTINGS\n" >> .env
+                                rm env_additions
+                                cp -rav deploy/app/* .
+                                echo Build completed on `date`
+                                echo Pushing the Docker image...
+                                docker build --pull -t testbuild .
+                                echo "Hash going to be used ${HASH}"
+                                docker tag testbuild:latest 364215618558.dkr.ecr.eu-west-1.amazonaws.com/testbuild:production_${HASH}
+                                docker push 364215618558.dkr.ecr.eu-west-1.amazonaws.com/testbuild:production_${HASH}
+                              fi
+          artifacts:
+              files: imagedefinitions.json
+      TimeoutInMinutes: 10
