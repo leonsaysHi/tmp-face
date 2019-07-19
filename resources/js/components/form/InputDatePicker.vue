@@ -2,7 +2,6 @@
   <div class="input-date-picker">
     <b-input
       v-if="isMobile"
-      v-validate="{ required }"
       :class="['form-control', state == true ? 'is-valid' : state == false ? 'is-invalid' : '']"
       :type="type === 'datetime' ? 'datetime-local' : type"
       autocomplete="off"

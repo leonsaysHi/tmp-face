@@ -31,6 +31,7 @@ Vue.component('topbar', require('./components/Topbar.vue').default);
 Vue.component('navbar', require('./components/Navbar.vue').default);
 Vue.component('input-date-picker', require('./components/form/InputDatePicker.vue').default);
 Vue.component('input-typeahead', require('./components/form/InputTypeahead.vue').default);
+Vue.component('input-file', require('./components/form/InputFile.vue').default);
 
 /* App */
 
