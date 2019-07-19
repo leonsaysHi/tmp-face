@@ -284,8 +284,8 @@ export default {
           { key: 'first_name', sortable: true },
           { key: 'last_name', sortable: true },
           'age',
-          { key: 'seemore', label: 'Actions' },
-          { key: 'actions', label: '' }
+          { key: 'actions', label: 'Actions' },
+          { key: 'seemore', label: '' }
         ],
         items: [
           { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
