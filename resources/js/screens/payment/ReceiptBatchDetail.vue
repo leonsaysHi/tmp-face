@@ -52,7 +52,7 @@
       <b-col cols="auto"><b-button type="submit" variant="primary" class="px-4">Mark Receipt as Received</b-button></b-col>
     </b-row>
     <hr class="lg secondary" />
-    <b-collapse v-model="table.filters.show">
+    <b-collapse v-model="table.filters.show" id="table-filter">
       <b-row>
         <b-col cols="12" md="4">
           <b-form-group
