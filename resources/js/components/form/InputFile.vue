@@ -15,11 +15,22 @@
       <b-button v-if="showReset" :variant="isError ? 'danger' : 'success'" @click="reset()" class="ml-1">Reset</b-button>
       <b-button v-else-if="showTrigger" :disabled="disableTrigger" :variant="disableTrigger ? 'secondary' : 'primary'" @click="upload()" class="ml-1">Upload</b-button>
     </div>
-    <b-progress v-if="isBusy" class="mt-2" :value="uploadedPerc" :max="100" show-progress animated />
+    <b-collapse v-model="showProgress" :id="'input-file-progress-' + _uid">
+      <div class="pt-1">
+        <b-progress :value="isSuccess ? 100 : isError ? 0 : uploadedPerc" :max="100" show-progress animated />
+      </div>
+    </b-collapse>
   </div>
 </template>
 
 <script>
+const resetData = {
+  file: null,
+  isBusy: false,
+  isSuccess: null,
+  isError: null,
+  uploadedPerc: 0,
+}
 export default {
   props: {
     value: { type: Object, default: null },
@@ -32,12 +43,7 @@ export default {
   },
   data() {
     return {
-      file: null,
-      title: null,
-      uploadedPerc: 0,
-      isBusy: false,
-      isSuccess: null,
-      isError: null,
+      ...resetData
     }
   },
   created() {
@@ -53,14 +59,14 @@ export default {
     disableTrigger() {
       return this.disabled || !this.file || this.isBusy
     },
+    showProgress: {
+      get: function() { return this.isBusy || this.showReset },
+  		set: function(newValue) { }
+    },
   },
   methods: {
     reset() {
-      this.file = null
-      this.isBusy = false
-      this.uploadedPerc = 0
-      this.isSuccess = null
-      this.isError = null
+      Object.assign(this.$data, resetData)
     },
     getFormData() {
       let formData = new FormData()
