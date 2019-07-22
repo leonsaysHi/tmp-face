@@ -17,17 +17,17 @@
 </head>
 
 <body>
-    <div id="app">
-        <topbar></topbar>
-        <navbar></navbar>
-        <main>
-            <b-container>
-                <b-link>Link</b-link>
-                <b-button variant="primary">Primary</b-button>
-                <b-button variant="outline-primary">Outline primary</b-button>
-            </b-container>
-        </main>
-    </div>
+  <div id="app">
+    <topbar></topbar>
+    <navbar></navbar>
+    <main>
+      <b-container>
+        <template v-if="currentScreen === 'styleguide'"><styleguide /></template>
+        <template v-if="currentScreen === 'payment'"><payment /></template>
+        <template v-if="currentScreen === 'home'"><home /></template>
+      </b-container>
+    </main>
+  </div>
 </body>
 
 </html>

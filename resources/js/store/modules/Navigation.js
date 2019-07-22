@@ -1,5 +1,5 @@
 const items = {
-  home: { label: 'Home', href:'#'},
+  home: { label: 'Home', screen:'home'},
   speakerManagement: { label: 'Speaker Management', href:'#'},
   packageManagement: { label: 'Package Management', href:'#'},
   satelliteVisit: { label: 'Satellite Visit', href:'#'},
@@ -15,6 +15,7 @@ export default {
   namespaced: true,
   strict: process.env.NODE_ENV !== 'production',
   state: {
+    currentScreen: 'home',
     navbarLinks: [
       items.home,
       items.speakerManagement,
@@ -26,6 +27,9 @@ export default {
     ]
   },
   mutations: {
+    navigate (state, screen) {
+      state.currentScreen = screen
+    }
   },
   getters: {
   },

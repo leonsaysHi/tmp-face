@@ -31,6 +31,7 @@
       <fa-icon icon="check" />
       <fa-icon icon="plus-square" size="lg" />
       <fa-icon icon="download" size="2x" />
+      <fa-icon icon="upload" size="2x" />
       <fa-icon icon="user-alt" size="3x" />
       <fa-icon icon="ellipsis-h" size="lg" />
       <fa-icon icon="eye" size="lg" />
@@ -179,6 +180,15 @@
         <small tabindex="-1" class="form-text text-muted">Result: {{ form.typeahead.value2 }}</small>
       </b-form-group>
 
+      <b-form-group id="input-group-8" label="Upload file" label-for="input-8">
+        <input-file
+          id="input-8"
+          v-model="form.file.file"
+          :api="form.file.uploadApi"
+          placeholder="(Tap here to add attachment)"
+        />
+      </b-form-group>
+
       <div class="d-flex justify-content-end">
         <b-button type="reset" variant="outline-secondary" class="ml-2">Reset</b-button>
         <b-button type="submit" variant="primary" class="ml-2 px-4">Submit</b-button>
@@ -196,7 +206,7 @@
       </b-modal>
     </div>
     <div class="styleguide__block">
-      <b-collapse v-model="table.filters.show">
+      <b-collapse v-model="table.filters.show" id="table-filter">
         <div class="pb-3">[Filters here...]</div>
       </b-collapse>
       <div class="d-flex justify-content-between">
@@ -271,7 +281,11 @@ export default {
             { text: "Saskatchewan", value: "SK" },
             { text: "Yukon", value: "YT" }
           ],
-        }
+        },
+        file: {
+          file: null,
+          uploadApi: '/api/upload'
+        },
       },
       foods: [{ text: 'Select One', value: null }, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
       table: {
