@@ -1,6 +1,6 @@
 import 'babel-polyfill';
 require('./lodash');
-require('./bootstrap');
+// require('./bootstrap');
 
 window.moment = require('moment');
 
@@ -34,8 +34,13 @@ Vue.component('input-typeahead', require('./components/form/InputTypeahead.vue')
 Vue.component('input-file', require('./components/form/InputFile.vue').default);
 
 /* App */
-
+import { mapState } from "vuex";
 const app = new Vue({
   el: '#app',
   store: new Vuex.Store(store),
+  computed: {
+    ...mapState({
+      currentScreen: state => state.Navigation.currentScreen,
+    }),
+  }
 });

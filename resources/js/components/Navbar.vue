@@ -4,7 +4,7 @@
       <b-nav>
         <template v-for="(item, idx) in items">
           <b-nav-item v-if="!item.subMenus" :key="idx"
-            :href="item.href"
+            @click="navigate(item.screen)"
           >{{ item.label }}</b-nav-item>
           <b-nav-item-dropdown v-else :key="idx"
             :id="'navbar-sub-'+idx"
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   computed: {
@@ -29,5 +29,8 @@ export default {
       items: state => state.Navigation.navbarLinks,
     }),
   },
+  methods: {
+    ...mapMutations('Navigation', [ 'navigate' ])
+  }
 }
 </script>
