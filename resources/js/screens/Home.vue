@@ -4,6 +4,7 @@
     <b-list-group>
       <b-list-group-item disabled>Home</b-list-group-item>
       <b-list-group-item><b-link @click="navigate('payment')">Payment</b-link></b-list-group-item>
+      <b-list-group-item><b-link @click="navigate('satellite-visit')">Satellite Visit</b-link></b-list-group-item>
       <b-list-group-item><b-link @click="navigate('styleguide')">Styleguide</b-link></b-list-group-item>
     </b-list-group>
   </div>
