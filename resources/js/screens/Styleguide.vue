@@ -120,7 +120,6 @@
           id="input-1"
           v-model="form.email"
           type="email"
-          required
           placeholder="Enter email"
         ></b-form-input>
       </b-form-group>
@@ -129,7 +128,6 @@
         <b-form-input
           id="input-2"
           v-model="form.name"
-          required
           placeholder="Enter name"
         ></b-form-input>
       </b-form-group>
@@ -139,7 +137,6 @@
           id="input-3"
           v-model="form.food"
           :options="foods"
-          required
         ></b-form-select>
       </b-form-group>
 
