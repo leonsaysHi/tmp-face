@@ -10,7 +10,8 @@ import ReceiptBatchList from './ReceiptBatchList'
 import ReceiptBatchDetail from './ReceiptBatchDetail'
 export default {
   components: {
-    ReceiptList
+    ReceiptBatchList,
+    ReceiptBatchDetail,
   },
   data() {
     return {}

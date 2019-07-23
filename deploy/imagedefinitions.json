@@ -1,4 +1,0 @@
-[{
-    "name": "NAME_AS_SEE_IN_TASK_DEFINITION_UNDER_CONTAINER_DEFINITIONS_CONTAINER_NAME",
-    "imageUri": "arn:aws:ecr:eu-west-1:364215618558:repository/ECR_NAME_HERE"
-}]

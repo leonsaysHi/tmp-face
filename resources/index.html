@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en-EN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Insight|STORE</title>
+
+    <!-- Scripts -->
+    <script src="js/app.js" defer></script>
+
+    <!-- Styles -->
+    <link href="css/app.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <div id="app">
+    <topbar></topbar>
+    <navbar></navbar>
+    <main>
+      <b-container class="pt-4">
+        <template v-if="currentScreen === 'styleguide'"><styleguide /></template>
+        <template v-if="currentScreen === 'payment'"><payment /></template>
+        <template v-if="currentScreen === 'home'"><home /></template>
+      </b-container>
+    </main>
+  </div>
+</body>
+
+</html>
