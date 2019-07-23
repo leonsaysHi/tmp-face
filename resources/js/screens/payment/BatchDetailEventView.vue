@@ -2,9 +2,9 @@
   <div>
     <div class="styleguide__block">
       <div class="d-flex justify-content-between mb-3">
-        <h3>Receipt Batch Detail</h3>
+        <h3>Receipt Management - Event View</h3>
         <div class="d-flex align-items-start">
-          <b-button variant="outline-primary" class="mr-3">View Event</b-button>
+          <b-button variant="outline-primary" class="mr-3">Switch to Receipt View</b-button>
           <div>
             <div>Receipt Status</div>
             <div class="h4">Not Received</div>
@@ -155,17 +155,20 @@ export default {
         },
         fields: [
           { key: 'receipt', label: 'Receipt #', sortable: true },
-          { key: 'po', label: 'PO', sortable: true },
           { key: 'receipt_type', label: 'Receipt Type', sortable: true },
+          { key: 'event_number', label: 'Event #', sortable: true },
+          { key: 'event_name', label: 'Event Name', sortable: true },
+          { key: 'event_reconcile_time', label: 'Event Reconcile Time', sortable: true },
+          { key: 'event_cost', label: 'Event Cost', sortable: true },
           { key: 'receipt_total_amount', label: 'Receipt Total Amount', sortable: true },
         ],
         items: [
-          { receipt: '123456', po: '3456', receipt_total_amount: 300, receipt_type: 'type1' },
-          { receipt: '456789', po: '6789', receipt_total_amount: 400, receipt_type: 'type2' },
-          { receipt: '741582', po: '1582', receipt_total_amount: 500, receipt_type: 'type1' },
-          { receipt: '852963', po: '2963', receipt_total_amount: 600, receipt_type: 'type2' },
-          { receipt: '978654', po: '8654', receipt_total_amount: 700, receipt_type: 'type3' },
-          { receipt: '645321', po: '5321', receipt_total_amount: 800, receipt_type: 'type1' },
+          { receipt: '123456', event_number: '3456', event_name: 'Conference', event_reconcile_time: new Date(), event_cost: 100, receipt_total_amount: 300, receipt_type: 'type1' },
+          { receipt: '456789', event_number: '3456', event_name: 'Conference', event_reconcile_time: new Date(), event_cost: 100, receipt_total_amount: 400, receipt_type: 'type2' },
+          { receipt: '741582', event_number: '1582', event_name: 'Conference', event_reconcile_time: new Date(), event_cost: 100, receipt_total_amount: 500, receipt_type: 'type1' },
+          { receipt: '852963', event_number: '2963', event_name: 'Conference', event_reconcile_time: new Date(), event_cost: 100, receipt_total_amount: 600, receipt_type: 'type2' },
+          { receipt: '978654', event_number: '8654', event_name: 'Conference', event_reconcile_time: new Date(), event_cost: 100, receipt_total_amount: 700, receipt_type: 'type3' },
+          { receipt: '645321', event_number: '5321', event_name: 'Conference', event_reconcile_time: new Date(), event_cost: 100, receipt_total_amount: 800, receipt_type: 'type1' },
         ]
       },
     }
