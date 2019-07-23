@@ -31,11 +31,15 @@ $link-hover-color:                        darken($link-color, 15%);
 
 // Buttons + Forms
 $input-btn-font-size:         $font-size-base;
+$input-btn-padding-y:         .5rem;
+$input-btn-padding-y-sm:      .375rem;
+$input-btn-padding-y-lg:      .75rem;
 
 // Buttons
-$btn-font-size:               $font-size-base;
-$btn-padding-y:               $input-btn-padding-y-lg;
-$btn-padding-y-sm:            $input-btn-padding-y;
+$btn-font-size:               $input-btn-font-size;
+$btn-padding-y:               $input-btn-padding-y;
+$btn-padding-y-sm:            $input-btn-padding-y-sm;
+$btn-padding-y-lg:            $input-btn-padding-y-lg;
 $btn-border-radius:           $border-radius-sm;
 $btn-border-radius-lg:        $border-radius;
 
@@ -46,6 +50,9 @@ $component-active-bg:         theme-color("primary");
 $label-margin-bottom:                          .25rem;
 $input-font-size:                              $input-btn-font-size;
 $input-border-width:                           2px;
+$input-padding-y:                              $input-btn-padding-y;
+$input-padding-y-sm:                           $input-btn-padding-y-sm;
+$input-padding-y-lg:                           $input-btn-padding-y-lg;
 $custom-select-border-width:                   $input-border-width;
 $custom-control-indicator-checked-disabled-bg: rgba(theme-color("primary"), .5);
 $custom-control-indicator-checked-bg:          $component-active-bg;
@@ -54,8 +61,12 @@ $custom-checkbox-indicator-indeterminate-bg:   $component-active-bg;
 $custom-radio-indicator-icon-checked:          $custom-checkbox-indicator-icon-checked;
 $custom-select-font-size:                      $input-font-size;
 $custom-file-border-width:                     $input-border-width;
-$custom-file-height:                           calc(#{$input-line-height * 1em} + #{$input-padding-y * 2} + #{$input-height-border} + 4px);
+$input-height-border:                          $input-border-width;
+$input-height-inner:                           calc(#{$input-line-height * 1em} + #{$input-padding-y * 2});
+$input-height:                                 calc(#{$input-line-height * 1em} + #{$input-padding-y * 2} + #{$input-height-border});
+
 $custom-file-height-inner:                     calc(#{$input-line-height * 1em} + #{$input-padding-y * 2} + 4px);
+$custom-file-height:                           calc(#{$input-line-height * 1em} + #{$input-padding-y * 2} + #{$input-height-border} + 4px);
 
 // Modals
 $modal-header-padding-y:           .5rem;
