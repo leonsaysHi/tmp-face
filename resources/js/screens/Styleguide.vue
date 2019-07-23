@@ -38,6 +38,7 @@
       <fa-icon icon="eye-slash" size="lg" />
       <fa-icon icon="caret-down" size="lg" />
       <fa-icon icon="caret-up" size="lg" />
+      <fa-icon icon="trash" size="lg" />
     </div>
     <div class="styleguide__block">
       <div class="d-flex justify-content-between mb-3">
