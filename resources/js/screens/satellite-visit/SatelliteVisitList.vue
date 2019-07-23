@@ -174,7 +174,7 @@
         </b-col>
         <b-col cols="12" md="4" class="d-flex align-items-end">
           <div class="d-flex mb-3">
-            <b-button type="reset" variant="outline-secondary" class="flex-grow-1">Reset</b-button>
+            <b-button type="reset" variant="outline-secondary" class="flex-grow-1" @click="resetAdvancedValues()">Reset</b-button>
             <b-button type="submit" variant="primary" class="flex-grow-1 ml-1">Submit</b-button>
           </div>
         </b-col>
@@ -210,7 +210,22 @@
 </template>
 
 <script>
-
+const advancedValuesDefault = () => ({
+  batch: null,
+  start_date: null,
+  end_date: null,
+  city: null,
+  createdby: null,
+  createdon: null,
+  status: null,
+  visitor: null,
+  visitorStatus: null,
+  eventType: null,
+  eventDetailType: null,
+  cloudEvent: null,
+  bu: null,
+  employee: null,
+})
 export default {
   data() {
     return {
@@ -219,22 +234,7 @@ export default {
           search: null
         },
         advanced: {
-          values: {
-            batch: null,
-            start_date: null,
-            end_date: null,
-            city: null,
-            createdby: null,
-            createdon: null,
-            status: null,
-            visitor: null,
-            visitorStatus: null,
-            eventType: null,
-            eventDetailType: null,
-            cloudEvent: null,
-            bu: null,
-            employee: null,
-          },
+          values: advancedValuesDefault(),
           createdbyOptions: [
             { text: "User1", value: "user-1" },
             { text: "User2", value: "user-2" },
@@ -301,6 +301,11 @@ export default {
           { proposal: '645321', name: 'Meeting Name', type: 'type3', date: new Date(), budget: 880, status: 'status2', organization: 'Pfizer', submitter: 'Name' }
         ]
       },
+    }
+  },
+  methods: {
+    resetAdvancedValues() {
+      this.form.advanced.values = advancedValuesDefault()
     }
   }
 }
