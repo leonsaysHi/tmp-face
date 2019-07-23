@@ -160,7 +160,8 @@
       </b-form-group>
 
       <b-form-group id="input-group-5">
-        <input-date-picker />
+        <input-date-picker v-model="form.datepicked" />
+        <small tabindex="-1" class="form-text text-muted">Result: {{ form.datepicked }}</small>
       </b-form-group>
 
       <b-form-group id="input-group-6" label="Typeahead with static options" label-for="input-6">
@@ -255,6 +256,7 @@ export default {
         name: '',
         food: null,
         checked: [],
+        datepicked: null,
         radios: {
           selected: 'first',
           options: [
