@@ -18,13 +18,19 @@ Vue.component('fa-icon', FontAwesomeIcon)
 
 /* I18n */
 import VueI18n from 'vue-i18n'
-import LangStrings from '../u18n/vue-i18n-locales.js'
 Vue.use(VueI18n)
+import LangStrings from './u18n/vue-i18n-locales.js'
+const i18n = new VueI18n({
+  locale: 'en',
+  messages: LangStrings,
+  silentTranslationWarn: true
+})
 
 /* Vuex store */
 import Vuex from 'vuex';
 Vue.use(Vuex);
-import store from './store';
+import storeMudules from './store';
+const store = new Vuex.Store(storeMudules)
 
 /* Screens */
 Vue.component('styleguide', require('./screens/Styleguide.vue').default);
@@ -43,12 +49,8 @@ Vue.component('input-file', require('./components/form/InputFile.vue').default);
 import { mapState } from "vuex";
 const app = new Vue({
   el: '#app',
-  store: new Vuex.Store(store),
-  i18n: new VueI18n({
-    locale: 'en',
-    messages: LangStrings,
-    silentTranslationWarn: true
-  }),
+  store,
+  i18n,
   computed: {
     ...mapState({
       currentScreen: state => state.Navigation.currentScreen,
