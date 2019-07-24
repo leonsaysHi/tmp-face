@@ -88,14 +88,18 @@
           <small>Specialization:</small>
           <div class="lead">Psycology</div>
         </b-col>
-        <hr class="secondary w-100 my-3">
+        <div class="w-100">
+          <hr class="secondary" />
+        </div>
         <b-col>
           <small>Event Agenda:</small>
           <div class="lead">Event 1: ###</div>
           <div class="lead">Event 2: ###</div>
           <div class="lead">Event 3: ###</div>
         </b-col>
-        <hr class="primary w-100 my-3">
+        <div class="w-100">
+          <hr class="secondary" />
+        </div>
         <b-col>
           <small>Comment:</small>
           <div class="lead">- -</div>
@@ -225,6 +229,9 @@
         :per-page="table.perPage"
         :current-page="table.currentPage"
       >
+        <template slot="date" slot-scope="data">
+          {{ dateFormat(data.value) }}
+        </template>
         <template slot="actions" slot-scope="data">
           <b-button :variant=" data.item.selected ? 'success' : 'outline-success'" size="sm">{{ data.item.selected ? 'Selected' : 'Select' }}<fa-icon v-if="data.item.selected" icon="check" class="ml-2" /></b-button>
         </template>
@@ -245,7 +252,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from "vuex"
+import dateFormat from '../mixins/dateFormat'
 const defaultValues = () => ({
   email: '',
   name: '',
@@ -258,6 +266,7 @@ const defaultValues = () => ({
   file: null,
 })
 export default {
+  mixins: [dateFormat],
   data() {
     return {
       form: {
@@ -302,17 +311,18 @@ export default {
           { key: 'first_name', sortable: true },
           { key: 'last_name', sortable: true },
           'age',
+          'date',
           { key: 'seemore', label: 'Actions' },
           { key: 'actions', label: '' }
         ],
         items: [
-          { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
-          { age: 21, first_name: 'Larsen', last_name: 'Shaw', selected: true },
-          { age: 89, first_name: 'Geneva', last_name: 'Wilson' },
-          { age: 38, first_name: 'Jami', last_name: 'Carney' },
-          { age: 41, first_name: 'Thomas', last_name: 'Wilson' },
-          { age: 18, first_name: 'Sara', last_name: 'Brown' },
-          { age: 22, first_name: 'Jamila', last_name: 'Leonard' },
+          { date: new Date(), age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
+          { date: new Date(), age: 21, first_name: 'Larsen', last_name: 'Shaw', selected: true },
+          { date: new Date(), age: 89, first_name: 'Geneva', last_name: 'Wilson' },
+          { date: new Date(), age: 38, first_name: 'Jami', last_name: 'Carney' },
+          { date: new Date(), age: 41, first_name: 'Thomas', last_name: 'Wilson' },
+          { date: new Date(), age: 18, first_name: 'Sara', last_name: 'Brown' },
+          { date: new Date(), age: 22, first_name: 'Jamila', last_name: 'Leonard' },
         ]
       },
     }
