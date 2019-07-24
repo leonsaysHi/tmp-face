@@ -188,6 +188,28 @@
         />
       </b-form-group>
 
+      <b-form-group id="multiple-select" label="Multiple Select" label-for="input-9">
+        <b-button block v-b-modal.modal-2 variant="outline-secondary" class="text-left" placeholder="Multiple Select"> {{ form.multipleSelected }} </b-button>
+
+        <b-modal
+          id="modal-2"
+          title="Multiple Select Options"
+          ok-only
+        >
+          <b-form-checkbox-group
+              id="checkbox-2"
+              name="multipleSelect"
+              v-model="form.multipleSelected"
+              :options="form.multipleSelectOptions"
+              stacked
+              switches
+              ></b-form-checkbox-group>
+          </b-form-checkbox-group>
+
+        </b-modal>
+
+      </b-form-group>
+
       <div class="d-flex justify-content-end">
         <b-button type="reset" @click="resetForm()" variant="outline-secondary" class="ml-2">Reset</b-button>
         <b-button type="submit" variant="primary" class="ml-2 px-4">Submit</b-button>
@@ -261,6 +283,7 @@ export default {
       form: {
         values: defaultValues(),
         fileUploadApi: '/api/upload',
+        multipleSelected: [],
         radioOptions: [
           { text: 'Toggle this custom radio', value: 'first' },
           { text: 'Or toggle this other custom radio', value: 'second' },
@@ -273,6 +296,12 @@ export default {
           { text: 'Option 2', value: 'option-2' },
           { text: 'Option 3', value: 'option-3' },
           { text: 'Option 4', value: 'option-4' },
+        ],
+        multipleSelectOptions: [
+          { text: 'Option 1', value: 'Option 01' },
+          { text: 'Option 2', value: 'Option 02' },
+          { text: 'Option 3', value: 'Option 03' },
+          { text: 'Option 4', value: 'Option 04' },
         ],
         typeaheadOptions: [
           { text: "Alberta", value: "AB" },
