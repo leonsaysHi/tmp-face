@@ -38,6 +38,7 @@
       <fa-icon icon="eye-slash" size="lg" />
       <fa-icon icon="caret-down" size="lg" />
       <fa-icon icon="caret-up" size="lg" />
+      <fa-icon icon="trash" size="lg" />
     </div>
     <div class="styleguide__block">
       <div class="d-flex justify-content-between mb-3">
@@ -119,7 +120,6 @@
           id="input-1"
           v-model="form.email"
           type="email"
-          required
           placeholder="Enter email"
         ></b-form-input>
       </b-form-group>
@@ -127,8 +127,7 @@
       <b-form-group id="input-group-2" label="Your Name:" label-for="input-2">
         <b-form-input
           id="input-2"
-          v-model="form.name"
-          required
+          v-model="form.values.name"
           placeholder="Enter name"
         ></b-form-input>
       </b-form-group>
@@ -136,14 +135,13 @@
       <b-form-group id="input-group-3" label="Food:" label-for="input-3">
         <b-form-select
           id="input-3"
-          v-model="form.food"
-          :options="foods"
-          required
+          v-model="form.values.select"
+          :options="form.selectOptions"
         ></b-form-select>
       </b-form-group>
 
       <b-form-group id="input-group-4">
-        <b-form-checkbox-group v-model="form.checked" id="checkboxes-4">
+        <b-form-checkbox-group v-model="form.values.checked" id="checkboxes-4">
           <b-form-checkbox value="me">Check me out</b-form-checkbox>
           <b-form-checkbox value="that">Check that out</b-form-checkbox>
         </b-form-checkbox-group>
@@ -152,45 +150,46 @@
       <b-form-group label="Radios using options">
         <b-form-radio-group
           id="radio-group-1"
-          v-model="form.radios.selected"
-          :options="form.radios.options"
+          v-model="form.values.radio"
+          :options="form.radioOptions"
           name="radio-options"
         ></b-form-radio-group>
       </b-form-group>
 
       <b-form-group id="input-group-5">
-        <input-date-picker />
+        <input-date-picker v-model="form.values.datepicked" />
+        <small tabindex="-1" class="form-text text-muted">Result: {{ form.values.datepicked }}</small>
       </b-form-group>
 
       <b-form-group id="input-group-6" label="Typeahead with static options" label-for="input-6">
         <input-typeahead
           id="input-6"
-          v-model="form.typeahead.value1"
-          :options="form.typeahead.options"
+          v-model="form.values.typeaheadStatic"
+          :options="form.typeaheadOptions"
         />
-        <small tabindex="-1" class="form-text text-muted">Result: {{ form.typeahead.value1 }}</small>
+        <small tabindex="-1" class="form-text text-muted">Result: {{ form.values.typeaheadStatic }}</small>
       </b-form-group>
 
       <b-form-group id="input-group-7" label="Typeahead with dynamic options" label-for="input-7">
         <input-typeahead
           id="input-7"
-          v-model="form.typeahead.value2"
+          v-model="form.values.typeaheadDynamic"
           :search-func="getTypeaheadOptions"
         />
-        <small tabindex="-1" class="form-text text-muted">Result: {{ form.typeahead.value2 }}</small>
+        <small tabindex="-1" class="form-text text-muted">Result: {{ form.values.typeaheadDynamic }}</small>
       </b-form-group>
 
       <b-form-group id="input-group-8" label="Upload file" label-for="input-8">
         <input-file
           id="input-8"
-          v-model="form.file.file"
-          :api="form.file.uploadApi"
+          v-model="form.values.file"
+          :api="form.fileUploadApi"
           placeholder="(Tap here to add attachment)"
         />
       </b-form-group>
 
       <div class="d-flex justify-content-end">
-        <b-button type="reset" variant="outline-secondary" class="ml-2">Reset</b-button>
+        <b-button type="reset" @click="resetForm()" variant="outline-secondary" class="ml-2">Reset</b-button>
         <b-button type="submit" variant="primary" class="ml-2 px-4">Submit</b-button>
       </div>
 
@@ -245,49 +244,52 @@
 
 <script>
 import { mapState } from "vuex";
-
+const defaultValues = () => ({
+  email: '',
+  name: '',
+  select: null,
+  checked: [],
+  datepicked: null,
+  radio: 'first',
+  typeaheadStatic: null,
+  typeaheadDynamic: null,
+  file: null,
+})
 export default {
   data() {
     return {
       form: {
-        email: '',
-        name: '',
-        food: null,
-        checked: [],
-        radios: {
-          selected: 'first',
-          options: [
-            { text: 'Toggle this custom radio', value: 'first' },
-            { text: 'Or toggle this other custom radio', value: 'second' },
-            { text: 'This one is Disabled', value: 'third', disabled: true },
-            { text: 'This is the 4th radio', value: { fourth: 4 } }
-          ]
-        },
-        typeahead: {
-          value1: null,
-          value2: null,
-          options: [
-            { text: "Alberta", value: "AB" },
-            { text: "British Columbia", value: "BC" },
-            { text: "Manitoba", value: "MB" },
-            { text: "New Brunswick", value: "NB" },
-            { text: "Newfoundland and Labrador", value: "NL" },
-            { text: "Nova Scotia", value: "NS" },
-            { text: "Northwest Territories", value: "NT" },
-            { text: "Nunavut", value: "NU" },
-            { text: "Ontario", value: "ON" },
-            { text: "Prince Edward Island", value: "PE" },
-            { text: "Quebec", value: "QC" },
-            { text: "Saskatchewan", value: "SK" },
-            { text: "Yukon", value: "YT" }
-          ],
-        },
-        file: {
-          file: null,
-          uploadApi: '/api/upload'
-        },
+        values: defaultValues(),
+        fileUploadApi: '/api/upload',
+        radioOptions: [
+          { text: 'Toggle this custom radio', value: 'first' },
+          { text: 'Or toggle this other custom radio', value: 'second' },
+          { text: 'This one is Disabled', value: 'third', disabled: true },
+          { text: 'This is the 4th radio', value: { fourth: 4 } },
+        ],
+        selectOptions: [
+          { text: 'Select', value: null },
+          { text: 'Option 1', value: 'option-1' },
+          { text: 'Option 2', value: 'option-2' },
+          { text: 'Option 3', value: 'option-3' },
+          { text: 'Option 4', value: 'option-4' },
+        ],
+        typeaheadOptions: [
+          { text: "Alberta", value: "AB" },
+          { text: "British Columbia", value: "BC" },
+          { text: "Manitoba", value: "MB" },
+          { text: "New Brunswick", value: "NB" },
+          { text: "Newfoundland and Labrador", value: "NL" },
+          { text: "Nova Scotia", value: "NS" },
+          { text: "Northwest Territories", value: "NT" },
+          { text: "Nunavut", value: "NU" },
+          { text: "Ontario", value: "ON" },
+          { text: "Prince Edward Island", value: "PE" },
+          { text: "Quebec", value: "QC" },
+          { text: "Saskatchewan", value: "SK" },
+          { text: "Yukon", value: "YT" },
+        ]
       },
-      foods: [{ text: 'Select One', value: null }, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
       table: {
         filters: {
           show: false,
@@ -314,12 +316,13 @@ export default {
     }
   },
   methods: {
+    resetForm() { this.form.values = defaultValues() },
     async getTypeaheadOptions(query) {
       const results = await this.fakeApi()
       return results
     },
     fakeApi () {
-      const APIresult = this.form.typeahead.options
+      const APIresult = this.form.typeaheadOptions
       return new Promise(function(resolve, reject) {
         setTimeout(() => {
           resolve(APIresult);

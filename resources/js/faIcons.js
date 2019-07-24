@@ -9,6 +9,7 @@ import {
     faEye,
     faEyeSlash,
     faPlusSquare,
+    faTrash,
     faUpload,
     faUserAlt,
 } from '@fortawesome/free-solid-svg-icons'
@@ -22,5 +23,6 @@ library.add(faEllipsisH)
 library.add(faEye)
 library.add(faEyeSlash)
 library.add(faPlusSquare)
+library.add(faTrash)
 library.add(faUpload)
 library.add(faUserAlt)
