@@ -173,7 +173,7 @@
           </b-form-group>
         </b-col>
         <b-col cols="12" md="4" class="d-flex align-items-end">
-          <div class="d-flex mb-3">
+          <div class="d-flex flex-grow-1 mb-3">
             <b-button type="reset" variant="outline-secondary" class="flex-grow-1" @click="resetAdvancedValues()">Reset</b-button>
             <b-button type="submit" variant="primary" class="flex-grow-1 ml-1">Submit</b-button>
           </div>
