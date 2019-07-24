@@ -2,6 +2,11 @@
   <div>
     <div class="d-flex justify-content-between mb-3">
       <h3>Search Event</h3>
+      <div class="d-flex align-items-start">
+        <satellite-new-visit-modal v-slot:default="slotProps">
+          <b-button variant="outline-primary" class="mr-3" @click="slotProps.toggle()">Schedule Visit</b-button>
+        </satellite-new-visit-modal>
+      </div>
     </div>
     <b-row>
       <b-col>
@@ -127,9 +132,13 @@
 </template>
 
 <script>
+import SatelliteNewVisitModal from './SatelliteNewVisitModal'
 import dateFormat from '../../mixins/dateFormat'
 export default {
   mixins: [dateFormat],
+  components: {
+    SatelliteNewVisitModal,
+  },
   data() {
     return {
       table: {
