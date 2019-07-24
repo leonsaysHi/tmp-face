@@ -8,7 +8,7 @@
         FACE
       </b-button>
       <b-button href="/" class="ml-auto">
-        User
+        {{ $t("global.login") }}
       </b-button>
     </b-container>
   </div>

@@ -16,6 +16,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 require('./faIcons')
 Vue.component('fa-icon', FontAwesomeIcon)
 
+/* I18n */
+import VueI18n from 'vue-i18n'
+import LangStrings from '../u18n/vue-i18n-locales.js'
+Vue.use(VueI18n)
+
 /* Vuex store */
 import Vuex from 'vuex';
 Vue.use(Vuex);
@@ -39,6 +44,11 @@ import { mapState } from "vuex";
 const app = new Vue({
   el: '#app',
   store: new Vuex.Store(store),
+  i18n: new VueI18n({
+    locale: 'en',
+    messages: LangStrings,
+    silentTranslationWarn: true
+  }),
   computed: {
     ...mapState({
       currentScreen: state => state.Navigation.currentScreen,
