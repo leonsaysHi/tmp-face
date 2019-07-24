@@ -43,16 +43,17 @@
 </template>
 
 <script>
+const valuesDefault = () => ({
+  date: null,
+  type: null,
+  specialist: null,
+})
 export default {
   data() {
     return {
       show: false,
       form: {
-        values: {
-          date: null,
-          type: null,
-          specialist: null,
-        },
+        values: valuesDefault(),
         specialistOptions: [
           { text: "User1", value: "user-1" },
           { text: "User2", value: "user-2" },
@@ -67,9 +68,12 @@ export default {
     }
   },
   methods: {
+    reset() {
+      this.form.values = valuesDefault()
+    },
     toggle() {
-      console.log(this.show)
       this.show = !this.show
+      if (this.show) { this.reset() }
     }
   }
 }
