@@ -10,19 +10,19 @@
       :disabled="disabled"
       :required="required"
       :state="state"
-      :value="value"
+      :value="selectedDate"
       @input="onInput"
     />
     <template v-else>
       <datetime-picker
         :class="[state == true ? 'is-valid' : state == false ? 'is-invalid' : '']"
         :name="name"
-        v-model="formattedValue"
+        v-model="selectedDate"
         :required="required"
         :placeholder="placeholder"
         :disabled="disabled"
-        @dp-change="onInput"
         :config="pickerConfig"
+        @dp-change="onInput"
       />
       <fa-icon icon="calendar-alt" size="lg" class="icon" />
     </template>
@@ -49,11 +49,11 @@ export default {
   data() {
     return {
       isMobile,
-      formattedValue: null
+      selectedDate: null
     };
   },
-  created(){
-    this.formattedValue = moment(this.value, this.valueFormat).format(this.displayFormat);
+  created() {
+    this.selectedDate = this.value
   },
   computed: {
     isDateTime() { return this.type && this.type === 'datetime' },
@@ -62,18 +62,24 @@ export default {
     pickerConfig () {
       return  {
         format: this.displayFormat,
-        sideBySide: true,
         useCurrent: false,
-        widgetPositioning: {
-          vertical: 'bottom',
-        },
       }
-    }
+    },
   },
   methods: {
     onInput(value) {
-      this.$emit('input', isMobile ? moment(value).format(this.valueFormat) : moment(this.formattedValue, this.displayFormat).format(this.valueFormat) );
+      if (this.isMobile || value.date) {
+        const emitted = this.isMobile ? moment(value).format(this.valueFormat) : moment(value.date, this.displayFormat).format(this.valueFormat)
+        this.$emit('input', emitted );
+      }
     },
-  }
+  },
+  watch: {
+    value: function(v) {
+      if (!v || v === '') {
+        this.selectedDate = null
+      }
+    }
+  },
 };
 </script>

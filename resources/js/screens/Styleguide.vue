@@ -157,7 +157,9 @@
       </b-form-group>
 
       <b-form-group id="input-group-5">
-        <input-date-picker v-model="form.values.datepicked" />
+        <input-date-picker
+          v-model="form.values.datepicked"
+        />
         <small tabindex="-1" class="form-text text-muted">Result: {{ form.values.datepicked }}</small>
       </b-form-group>
 
