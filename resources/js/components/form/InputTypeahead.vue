@@ -1,14 +1,16 @@
 <template>
   <div class="input-typeahead">
-    <vue-bootstrap-typeahead v-if="!searchFunc"
-      v-model="currentValue"
-      :data="options"
-      :placeholder="placeholder"
-      :serializer="serializer"
-      @hit="$emit('input', $event)"
-    />
+    <template v-if="!searchFunc">
+      <vue-bootstrap-typeahead  ref="typeahead"
+        v-model="selectedOption"
+        :data="options"
+        :placeholder="placeholder"
+        :serializer="serializer"
+        @hit="$emit('input', $event)"
+      />
+    </template>
     <template v-else>
-      <vue-bootstrap-typeahead
+      <vue-bootstrap-typeahead ref="typeahead"
         :data="apiOptions"
         v-model="typedSearch"
         :serializer="serializer"
@@ -40,14 +42,14 @@ export default {
   },
   data() {
     return {
-      currentValue: null,
+      selectedOption: null,
       typedSearch: '',
       apiOptions: [],
       isBusy: false,
     };
   },
   created() {
-    this.currentValue = this.value
+    this.selectedOption = this.value
   },
   methods: {
     async getSearchResults(query) {
@@ -55,9 +57,18 @@ export default {
       const results = await this.searchFunc(query)
       this.apiOptions = results
       this.isBusy = false
+    },
+    reset() {
+      this.selectedOption = null
+      this.$refs.typeahead.inputValue = ''
     }
   },
   watch: {
+    value: function(v) {
+      if (!v || v === '') {
+        this.reset()
+      }
+    },
     typedSearch: _.debounce(function(query) {
       query = _.trim(query)
       if (query.length) {

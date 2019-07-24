@@ -73,11 +73,14 @@ export default {
         this.$emit('input', emitted );
       }
     },
+    reset() {
+      this.selectedDate = null
+    },
   },
   watch: {
     value: function(v) {
       if (!v || v === '') {
-        this.selectedDate = null
+        this.reset()
       }
     }
   },
