@@ -81,6 +81,9 @@
         <b-link class="mr-2">View Receipt Detail</b-link>
         <b-button variant="primary" size="sm"><fa-icon icon="ellipsis-h" /></b-button>
       </template>
+      <template slot="receive_date" slot-scope="data">
+        {{ dateFormat(data.value) }}
+      </template>
     </b-table>
     <b-pagination  v-if="table.items.length > table.currentPage"
       v-model="table.currentPage"
@@ -93,8 +96,9 @@
 </template>
 
 <script>
-
+import dateFormat from '../../mixins/dateFormat'
 export default {
+  mixins: [dateFormat],
   data() {
     return {
       form:{

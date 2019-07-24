@@ -111,6 +111,9 @@
       :per-page="table.perPage"
       :current-page="table.currentPage"
     >
+      <template slot="event_reconcile_time" slot-scope="data">
+        {{ dateFormat(data.value) }}
+      </template>
     </b-table>
     <b-pagination  v-if="table.items.length > table.currentPage"
       v-model="table.currentPage"
@@ -123,8 +126,9 @@
 </template>
 
 <script>
-
+import dateFormat from '../../mixins/dateFormat'
 export default {
+  mixins: [dateFormat],
   data() {
     return {
       form:{
