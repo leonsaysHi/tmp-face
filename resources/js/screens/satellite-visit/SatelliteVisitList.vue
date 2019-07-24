@@ -198,6 +198,9 @@
       <template slot="actions" slot-scope="data">
         <b-button variant="primary" size="sm"><fa-icon icon="ellipsis-h" /></b-button>
       </template>
+      <template slot="date" slot-scope="data">
+        {{ dateFormat(data.value) }}
+      </template>
     </b-table>
     <b-pagination  v-if="table.items.length > table.currentPage"
       v-model="table.currentPage"
@@ -210,6 +213,7 @@
 </template>
 
 <script>
+import dateFormat from '../../mixins/dateFormat'
 const advancedValuesDefault = () => ({
   batch: null,
   start_date: null,
@@ -227,6 +231,7 @@ const advancedValuesDefault = () => ({
   employee: null,
 })
 export default {
+  mixins: [dateFormat],
   data() {
     return {
       form: {
