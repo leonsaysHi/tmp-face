@@ -141,6 +141,7 @@ export default {
   },
   data() {
     return {
+      test: null,
       table: {
         perPage: 5,
         currentPage: 1,
