@@ -9,6 +9,7 @@ import {
     faEye,
     faEyeSlash,
     faPlusSquare,
+    faTimes,
     faTrash,
     faUpload,
     faUserAlt,
@@ -23,6 +24,7 @@ library.add(faEllipsisH)
 library.add(faEye)
 library.add(faEyeSlash)
 library.add(faPlusSquare)
+library.add(faTimes)
 library.add(faTrash)
 library.add(faUpload)
 library.add(faUserAlt)

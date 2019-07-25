@@ -39,6 +39,7 @@
       <fa-icon icon="caret-down" size="lg" />
       <fa-icon icon="caret-up" size="lg" />
       <fa-icon icon="trash" size="lg" />
+      <fa-icon icon="times" size="lg" />
     </div>
     <div class="styleguide__block">
       <div class="d-flex justify-content-between mb-3">
@@ -298,7 +299,7 @@ export default {
           { text: "Prince Edward Island", value: "PE" },
           { text: "Quebec", value: "QC" },
           { text: "Saskatchewan", value: "SK" },
-          { text: "Yukon", value: "YT" },
+          { text: "Yukon", value: "YT" }
         ]
       },
       table: {
