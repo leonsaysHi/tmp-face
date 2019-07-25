@@ -1,6 +1,12 @@
 <template>
   <div class="input-typeahead">
-    <template v-if="!searchFunc">
+    <b-input-group v-if="value && value.text" class="w-100">
+      <b-form-input :disabled="true" :value="value.text"></b-form-input>
+      <b-input-group-append>
+        <b-button variant="secondary" class="flex-grow-0" @click="$emit('input', null)"><fa-icon icon="times" /></b-button>
+      </b-input-group-append>
+    </b-input-group>
+    <template v-else-if="!searchFunc">
       <vue-bootstrap-typeahead  ref="typeahead"
         v-model="selectedOption"
         :data="options"
